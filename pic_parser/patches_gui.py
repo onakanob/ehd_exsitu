@@ -139,6 +139,7 @@ if __name__ == "__main__":
     DIR = "E:\Dropbox\SPEED\Self Driving EHD\Data\Olympus mosaics"
     PIC = os.path.join(DIR, "10-mar-22__1.6V harmonics__10x.tif")
     PATTERN = os.path.join(DIR, "pattern.txt")
+
     offsets_file = os.path.join(DIR, "logs/offsetlist.txt")
     # LOG = os.path.join(DIR, "results 10 mar large noz 300 pitch.xlsx")
 

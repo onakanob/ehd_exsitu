@@ -86,7 +86,6 @@ def list_points_on_pattern(pattern, start, spacing, point_count, scale):
     return points
 
 
-# def display_patch(im, pattern, points, point_idx, axs=None):
 def display_patch(im, point, angle, spacing, pitch, pattern, axs=None):
     if axs is None:
         _, axs = plt.subplots(1, 2)
