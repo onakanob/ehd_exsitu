@@ -14,12 +14,14 @@ from pic_parser.patches_gui import run_patches_gui
 
 
 if __name__ == "__main__":
-    DIR = "E:\Dropbox\SPEED\Self Driving EHD\Data\Olympus mosaics"
+    DIR = 'C:/Dropbox/SPEED/Self Driving EHD/Data/2-May-2022__run 1'
+    PIC = '2-may-22 run1.bmp'
+    PATTERN = 'pattern.txt'
 
-    PIC = os.path.join(DIR, "10-mar-22__1.6V harmonics__10x.tif")
-    PATTERN = os.path.join(DIR, "pattern.txt")
-    LOG = os.path.join(DIR, "results 10 mar large noz 300 pitch.xlsx")
+    picpath = os.path.join(DIR, PIC)
+    patternpath = os.path.join(DIR, PATTERN)
 
+    params_file = os.path.join(DIR, "logs/pattern_params.json")
     offsets_file = os.path.join(DIR, "logs/offsetlist.txt")
 
-    run_patches_gui(PIC, PATTERN, offsets_file)
+    run_patches_gui(picpath, patternpath, params_file, offsets_file)

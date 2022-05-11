@@ -42,7 +42,7 @@ def microns_into_pattern(x, pattern, scale):
     return point, np.arctan2(angle[1], angle[0])
 
 
-def patchmaker(img, height, width, center_y, center_x, angle):
+def old_patchmaker(img, height, width, center_y, center_x, angle):
     """Courtesy user Rozen Moon at
     https://stackoverflow.com/questions/49892205/extracting-patch-of-a-certain-size-at-certain-angle-with-given-center-from-an-im
     """
@@ -63,6 +63,19 @@ def patchmaker(img, height, width, center_y, center_x, angle):
     patch = ndimage.map_coordinates(
         img, [rotatedcoords[1]+center_y, rotatedcoords[0]+center_x], order=1, mode='nearest').reshape(height, width)
     return patch
+
+
+def patchmaker(img, height, width, center_y, center_x, angle):
+    new_height = np.abs(np.cos(angle) * height + np.sin(angle) * width)
+    new_width = np.abs(np.cos(angle) * width + np.sin(angle) * height)
+    max_vals = np.shape(img)
+    min_x = np.max((0, int(center_x - new_width / 2)))
+    max_x = np.min((max_vals[1], int(center_x + new_width / 2)))
+    min_y = np.max((0, int(center_y - new_height / 2)))
+    max_y = np.min((max_vals[0], int(center_y + new_height / 2)))
+    patch = img[min_y:max_y, min_x:max_x]
+    return patch
+
 
 
 def align_pattern(csv, scale, theta, offset):

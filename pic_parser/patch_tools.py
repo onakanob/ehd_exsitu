@@ -13,7 +13,7 @@ from PIL.ImageOps import grayscale
 from .pattern_tools import patchmaker, align_pattern, microns_into_pattern
 
 
-def histogram_patches(patches, bins=100, xlim=(140, 200)):
+def histogram_patches(patches, bins=100, xlim=(140, 200), output=None):
     """
     Display histogram of brightness values from all entries in a collection of images
 
@@ -26,7 +26,11 @@ def histogram_patches(patches, bins=100, xlim=(140, 200)):
                                      patch.ravel()))
     plt.hist(brightness, bins=bins)
     plt.xlim(xlim)
-    plt.show()
+    if output is None:
+        plt.show()
+    else:
+        plt.savefig(output)
+    plt.clf()
 
 
 def isolate_patches(picture, pattern_file, pattern_params, offsets,
@@ -35,7 +39,7 @@ def isolate_patches(picture, pattern_file, pattern_params, offsets,
     pic = np.fliplr(np.flipud(np.array(grayscale(pic)).T))
 
     pattern = align_pattern(pattern_file,
-                            pattern_params['scale'],
+                            pattern_params['px_per_mm'] / 1e4,
                             pattern_params['theta'],
                             pattern_params['pattern_offset'])
 
@@ -56,7 +60,7 @@ def isolate_patches(picture, pattern_file, pattern_params, offsets,
 
 def parse_patch(patch, threshold=170, min_size=6, return_image=False):
     bw = (patch >= threshold).astype("uint8")
-    
+
     contours, hierarchy = cv.findContours(
         bw, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
 
