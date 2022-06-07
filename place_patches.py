@@ -12,7 +12,7 @@ import os
 import sys
 import json
 
-from pic_parser.patches_gui import run_alignment_gui
+from pic_parser.patches_gui import run_patches_gui
 
 
 if __name__ == "__main__":
@@ -20,6 +20,7 @@ if __name__ == "__main__":
     # DIR = 'C:/Dropbox/SPEED/Self Driving EHD/Data/2-May-2022__run 2'
 
     params_file = os.path.join(DIR, "pattern_params.json")
+    offsets_file = os.path.join(DIR, "logs/offsetlist.txt")
 
     with open(params_file, 'r') as f:
         pattern_params = json.load(f)
@@ -31,4 +32,4 @@ if __name__ == "__main__":
     picpath = os.path.join(DIR, pattern_params['picture'])
     patternpath = os.path.join(DIR, pattern_params['pattern'])
 
-    run_alignment_gui(picpath, patternpath, params_file)
+    run_patches_gui(picpath, patternpath, params_file, offsets_file)
