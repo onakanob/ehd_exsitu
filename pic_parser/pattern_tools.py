@@ -99,15 +99,25 @@ def list_points_on_pattern(pattern, start, spacing, point_count, scale):
     return points
 
 
+def display_pattern(im, pattern, point=None, axs=None):
+    if axs is None:
+        _, axs = plt.subplots(1, 1)
+
+    axs.imshow(im)
+    axs.plot(pattern[:, 1], pattern[:, 0], '--r', linewidth=0.2)
+
+    # point, angle = points[point_idx]
+    if point is not None:
+        axs.plot(point[1], point[0], '*r')
+    return axs
+
+
 def display_patch(im, point, angle, spacing, pitch, pattern, axs=None):
     if axs is None:
         _, axs = plt.subplots(1, 2)
 
-    axs[0].imshow(im)
-    axs[0].plot(pattern[:, 1], pattern[:, 0], '--r', linewidth=0.2)
+    display_pattern(im, pattern, point=point, axs=axs[0])
 
-    # point, angle = points[point_idx]
-    axs[0].plot(point[1], point[0], '*r')
     patch = patchmaker(im, spacing, pitch,
                        int(point[0]), int(point[1]), angle)
     axs[1].imshow(patch)

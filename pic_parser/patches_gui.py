@@ -14,7 +14,8 @@ from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
 from PIL import Image
 from PIL.ImageOps import grayscale
 
-from .pattern_tools import (microns_into_pattern, align_pattern, display_patch)
+from .pattern_tools import (microns_into_pattern, align_pattern,
+                            display_pattern, display_patch)
 
 
 class Micros_GUI(tk.Tk):
@@ -34,7 +35,11 @@ class Micros_GUI(tk.Tk):
 
     def __init__(self, paramfile):
         super().__init__()
-        with open(paramfile, 'r') as f:
+        self.paramfile = paramfile
+        self.load_paramfile()
+
+    def load_paramfile(self):
+        with open(self.paramfile, 'r') as f:
             params = json.load(f)
         self.px_per_mm = params['px_per_mm']
         self.scale = self.px_per_mm / 1e4
@@ -47,20 +52,51 @@ class Micros_GUI(tk.Tk):
 
 
 class Align_GUI(Micros_GUI):  # TODO
-    def __init__(self, paramfile):
+    docstring = """Make changes to pattern_params to overlay the pattern line
+    and first feature over the image. Click on the window to refresh view."""
+
+    def __init__(self, picture, pattern_file, paramfile):
         super().__init__(paramfile)
 
+        self.pic = Image.open(picture)
+        self.pic = np.fliplr(np.flipud(np.array(grayscale(self.pic)).T))
+        self.pattern_file = pattern_file
+        self.pattern = align_pattern(self.pattern_file, self.scale, self.theta,
+                                     self.pattern_offset)
+
         self.title("Pattern Aligner")
-        self.geometry("1000x1000")
+        self.geometry("1200x900")
+
+        # self.label = None
         self.createWidgets()
+        print(self.docstring)
 
     def createWidgets(self):
         f0 = tk.Frame()
         self.fig = plt.figure(figsize=(16, 16))
-        self.fig.add_subplot(111)
-        canvas = FigureCanvasTkAgg(self.fig, f0)
-        canvas._tkcanvas.pack(fill=tk.BOTH, expand=1)
+        self.ax = self.fig.add_subplot(111)
+        self.canvas = FigureCanvasTkAgg(self.fig, f0)
+        self.canvas._tkcanvas.pack(fill=tk.BOTH, expand=1)
         f0.pack(fill=tk.BOTH, expand=1)
+
+        self.update_fig
+
+    def update_fig(self):
+        self.load_paramfile()
+        self.pattern = align_pattern(self.pattern_file, self.scale, self.theta,
+                                     self.pattern_offset)
+        self.ax.clear()
+        
+        point, _ = microns_into_pattern(self.starting_offset,
+                                        self.pattern, self.px_per_mm * 1e-3)
+        display_pattern(self.pic, self.pattern, point=point, axs=self.ax)
+        # self.label = tk.Label(
+        #     self, text=f"point: {self.point}  {point}  {angle} deg")
+        # self.label.place(x=10, y=10)
+        self.canvas.draw()
+
+    def leftclick(self, event):
+        self.update_fig()
 
 
 class Patches_GUI(Micros_GUI):
@@ -153,6 +189,11 @@ def run_patches_gui(im_path, pattern_path, params_file, offsets_file):
     app.bind("<Key>", app.keypress)
     app.mainloop()
 
+
+def run_alignment_gui(im_path, pattern_path, params_file):
+    app = Align_GUI(im_path, pattern_path, params_file)
+    app.bind("<Button-1>", app.leftclick)
+    app.mainloop()
 
 if __name__ == "__main__":
     DIR = "E:/Dropbox/SPEED/Self Driving EHD/Data/Olympus mosaics"
