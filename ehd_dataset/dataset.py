@@ -76,14 +76,15 @@ class EHD_Loader():
         self.datasets = []
         for i, row in index.iterrows():
             loc = os.path.join(index_dir, row['Path'])
-            wavefile = os.path.join(loc, row['Results'])  # get from json!
-            # TODO read pattern_params.json for wav_file and um_per_px
-            um_per_px = 1                                 # TODO do right
-            # TODO delete Results columns from index files
+            with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
+                params = json.load(f)
+            wavefile = os.path.join(loc, params['wave_file'])
+            um_per_px = 1e3 / params['px_per_mm']
             self.datasets.append(ehd_dir2data(loc, wavefile, um_per_px))
 
     def get_datasets(self):
         return self.datasets
+
 
 #     # Experimental
 #     waves.loc[i, 'absintegral'] = np.sum(np.abs(waves.wave.loc[i]))
