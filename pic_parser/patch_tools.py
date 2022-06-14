@@ -58,8 +58,12 @@ def isolate_patches(picture, pattern_file, pattern_params, offsets,
     return patches
 
 
-def parse_patch(patch, threshold=170, min_size=6, return_image=False):
+def parse_patch(patch, threshold=170, low_thresh=None, min_size=6,
+                return_image=False):
     bw = (patch >= threshold).astype("uint8")
+    if low_thresh is not None:
+        bw = bw + (patch <= low_thresh).astype("uint8")
+        
 
     contours, hierarchy = cv.findContours(
         bw, cv.RETR_TREE, cv.CHAIN_APPROX_NONE)
