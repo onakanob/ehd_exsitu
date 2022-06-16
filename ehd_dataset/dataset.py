@@ -11,14 +11,15 @@ Created on June 11 2022
 
 import os
 import json
+import warnings
 from pathlib import Path
 
 import numpy as np
 import pandas as pd
 from matplotlib import pyplot as plt
-from scipy.stats import pearsonr
+# from scipy.stats import pearsonr
 
-from .utils import cell_to_array, parse_volt_strings
+from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
 def ehd_dir2data(directory, wavefile, um_per_px):
@@ -39,17 +40,19 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     auac = waves.wave.apply(lambda x: np.sum(np.abs(x)))
 
     corrs = []
-    max_offset = waves.index.max() - dots.index.max()
+    max_offset = 20
     for offset in range(max_offset):
-        test_auac = auac.loc[dots.index + offset]
-        corr, _ = pearsonr(dots.area, test_auac)
+        corr, _, _ = correlate_dfs(dots, 'area', auac, None, offset)
         corrs.append(corr)
     offset = np.argmax(corrs)
-    print(f'Using offset {offset} for observation matching with dataset {directory}')
+    _, Aidx, Bidx = correlate_dfs(dots, 'area', auac, None, offset)
+    print(f'dataset {directory}\toffset {offset}\tcorr {np.max(corrs)}')
 
-    dots['wave'] = np.array(waves.wave.loc[dots.index + offset])
-    dots['vector'] = np.array(waves.vector.loc[dots.index + offset])
-    dots['volts'] = np.array(waves.volts.loc[dots.index + offset])
+    dots = dots.loc[Aidx]
+
+    dots['wave'] = np.array(waves.wave.loc[Bidx])
+    dots['vector'] = np.array(waves.vector.loc[Bidx])
+    dots['volts'] = np.array(waves.volts.loc[Bidx])
     dots['area'] *= um_per_px ** 2
 
     # Dev validation code:
@@ -73,17 +76,35 @@ class EHD_Loader():
     def __init__(self, index_file):
         index_dir = str(Path(index_file).parent)
         index = pd.read_excel(index_file)
+        self.names = []
         self.datasets = []
+
         for i, row in index.iterrows():
-            loc = os.path.join(index_dir, row['Path'])
-            with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
-                params = json.load(f)
-            wavefile = os.path.join(loc, params['wave_file'])
-            um_per_px = 1e3 / params['px_per_mm']
-            self.datasets.append(ehd_dir2data(loc, wavefile, um_per_px))
+            try:
+                loc = os.path.join(index_dir, row['Path'])
+                with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
+                    params = json.load(f)
+                wavefile = os.path.join(loc, params['wave_file'])
+                um_per_px = 1e3 / params['px_per_mm']
+                self.datasets.append(ehd_dir2data(loc, wavefile, um_per_px))
+                self.names.append(os.path.basename(row['Path']))
+            except Exception as e:
+                print(f"Failed to load {row['Path']}: {e}")
+                # raise(e)        # TODO
 
     def get_datasets(self):
         return self.datasets
+
+
+    def folded_dataset(self, fold, xtype, ytype):
+        # TODO
+
+    def __repr__(self):
+        return f"EHD dataset loader with run directories: {self.names}"
+
+    @property
+    def num_folds(self):
+        return len(self.names)
 
 
 #     # Experimental
