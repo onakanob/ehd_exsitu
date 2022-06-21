@@ -95,9 +95,54 @@ class EHD_Loader():
     def get_datasets(self):
         return self.datasets
 
+    def x_method_vector(self, df):
+        """Method for grabbing the vector description from a dataframe and
+        returning it as a numpy array."""
+        return np.array(list(df.vector))
+
+    def y_method_area(self, df):
+        """Method for returning the feature area from a dataframe as a numpy
+        array"""
+        import ipdb; ipdb.set_trace()
+        return None
 
     def folded_dataset(self, fold, xtype, ytype):
-        # TODO
+        if not type(fold) == int:
+            raise TypeError("fold must be an integer")
+        elif fold >= len(self.names):
+            raise ValueError(f"not enough EHD datasets to create fold {fold}")
+        train_set = {'X': np.array([[]]), 'Y': np.array([[]]), 'p': np.array([])}
+        eval_set =  {'X': np.array([[]]), 'Y': np.array([[]]), 'p': np.array([])}
+        fold_name = self.names[fold]
+
+        if xtype == "vector":
+            xmethod = self.x_method_vector
+        else:
+            raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
+
+        if ytype == "area":
+            ymethod = self.y_method_area
+        else:
+            raise ValueError(f"EHD dataset with ytype {ytype} not implemented")
+
+        for p in range(len(self.names)):
+            if fold == p:
+                eval_set['X'] = np.concatenate((eval_set['X'],
+                                                xmethod(self.datasets[p])))
+                eval_set['Y'] = np.concatenate((eval_set['Y'],
+                                                ymethod(self.datasets[p])))
+                eval_set['p'] = np.concatenate((eval_set['p'],
+                                                p * np.ones(len(datasets[p]))))
+            else:
+                train_set['X'] = np.concatenate((train_set['X'],
+                                                 xmethod(self.datasets[p])))
+                train_set['Y'] = np.concatenate((train_set['Y'],
+                                                 ymethod(self.datasets[p])))
+                train_set['p'] = np.concatenate((train_set['p'],
+                                                p * np.ones(len(datasets[p]))))
+
+        return train_set, eval_set, fold_name
+
 
     def __repr__(self):
         return f"EHD dataset loader with run directories: {self.names}"
