@@ -68,6 +68,20 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     return dots
 
 
+def safecat(arr1, arr2):
+    """Concatenate two arrays with numpy concatenate. If one array is None,
+    simply return the other array."""
+    if (arr1 is None) or (len(arr1) == 0):
+        return arr2
+    elif (arr2 is None) or (len(arr2) == 0):
+        return arr1
+    else:
+        try:
+            return np.concatenate((arr1, arr2))
+        except:
+            import ipdb; ipdb.set_trace()
+
+
 class EHD_Loader():
     """Class for loading multiple waveform-print metric pairs by referencing an
     index file. For each dataset, match up image analysis and waveform indices,
@@ -90,56 +104,72 @@ class EHD_Loader():
                 self.names.append(os.path.basename(row['Path']))
             except Exception as e:
                 print(f"Failed to load {row['Path']}: {e}")
-                # raise(e)        # TODO
 
     def get_datasets(self):
         return self.datasets
 
-    def x_method_vector(self, df):
-        """Method for grabbing the vector description from a dataframe and
-        returning it as a numpy array."""
-        return np.array(list(df.vector))
+    def dataset_col_to_vec(self, col, p):
+        """Return column 'col' of dataset index 'p' as a flat numpy array"""
+        return np.array(list(self.datasets[p][col]))
 
-    def y_method_area(self, df):
-        """Method for returning the feature area from a dataframe as a numpy
-        array"""
-        import ipdb; ipdb.set_trace()
-        return None
+    def filters_2_mask(self, filters, p):
+        df = self.datasets[p]
+        mask = np.ones(len(df)).astype(bool)
+        for filt in filters:
+            mask *= (df[filt[0]].apply(filt[1]) == filt[2]).astype(bool)
+        return np.array(mask)
 
-    def folded_dataset(self, fold, xtype, ytype):
+    def folded_dataset(self, fold, xtype, ytype, filters=[]):
+        """
+        filters - list of 3ples, each (column, function, value). Only returns
+        rows of datasets where df[column].apply(function) == value for all
+        3ples in the filter list."""
+
         if not type(fold) == int:
             raise TypeError("fold must be an integer")
         elif fold >= len(self.names):
             raise ValueError(f"not enough EHD datasets to create fold {fold}")
-        train_set = {'X': np.array([[]]), 'Y': np.array([[]]), 'p': np.array([])}
-        eval_set =  {'X': np.array([[]]), 'Y': np.array([[]]), 'p': np.array([])}
         fold_name = self.names[fold]
 
-        if xtype == "vector":
-            xmethod = self.x_method_vector
+        train_set = {'X': None, 'Y': None, 'p': None}
+        eval_set = train_set.copy()
+
+        if xtype in ("vector", "wave"):  # just grab a column
+            xmethod = lambda p: self.dataset_col_to_vec(col=xtype, p=p)
         else:
             raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
 
-        if ytype == "area":
-            ymethod = self.y_method_area
+        if ytype in ("area", "obj_count"):  # just grab a column
+            ymethod = lambda p: self.dataset_col_to_vec(col=ytype, p=p)
+        elif ytype == "jetted":  # Did anything print at all?
+            def jetted(p):
+                y = np.array(list(self.datasets[p]['area'] > 0))
+                return np.concatenate((y[:, None], ~y[:, None]), axis=1)
+            ymethod = jetted
         else:
             raise ValueError(f"EHD dataset with ytype {ytype} not implemented")
 
         for p in range(len(self.names)):
+            mask = self.filters_2_mask(filters, p)
+            if mask.sum() == 0:
+                import ipdb; ipdb.set_trace()
+
             if fold == p:
-                eval_set['X'] = np.concatenate((eval_set['X'],
-                                                xmethod(self.datasets[p])))
-                eval_set['Y'] = np.concatenate((eval_set['Y'],
-                                                ymethod(self.datasets[p])))
-                eval_set['p'] = np.concatenate((eval_set['p'],
-                                                p * np.ones(len(datasets[p]))))
+                eval_set['X'] = safecat(eval_set['X'],
+                                        xmethod(p)[mask])
+                eval_set['Y'] = safecat(eval_set['Y'],
+                                        ymethod(p)[mask])
+                eval_set['p'] = safecat(eval_set['p'],
+                                        p * np.ones(mask.sum()))
+                                        # p * np.ones(len(self.datasets[p])))
             else:
-                train_set['X'] = np.concatenate((train_set['X'],
-                                                 xmethod(self.datasets[p])))
-                train_set['Y'] = np.concatenate((train_set['Y'],
-                                                 ymethod(self.datasets[p])))
-                train_set['p'] = np.concatenate((train_set['p'],
-                                                p * np.ones(len(datasets[p]))))
+                train_set['X'] = safecat(train_set['X'],
+                                         xmethod(p)[mask])
+                train_set['Y'] = safecat(train_set['Y'],
+                                         ymethod(p)[mask])
+                train_set['p'] = safecat(train_set['p'],
+                                         p * np.ones(mask.sum()))
+                                         # p * np.ones(len(self.datasets[p])))
 
         return train_set, eval_set, fold_name
 
@@ -150,11 +180,3 @@ class EHD_Loader():
     @property
     def num_folds(self):
         return len(self.names)
-
-
-#     # Experimental
-#     waves.loc[i, 'absintegral'] = np.sum(np.abs(waves.wave.loc[i]))
-#     waves.loc[i, 'absmax'] = np.max(waves.wave.loc[i])
-#     waves.loc[i, 'vmag'] = np.sqrt(np.sum(waves.vector.loc[i] ** 2))
-#     waves.loc[i, 'bias'] = np.abs(waves.vector.loc[i][0])
-#     waves.loc[i, 'maxcumsum'] = np.max(np.abs(np.cumsum(waves.wave.loc[i])))

@@ -6,6 +6,8 @@ Created on June 15 2022
 """
 import numpy as np
 
+from .utils import regression_metrics, classification_metrics
+
 
 class MLE_Regressor():
     def __init__(self, params):
@@ -13,11 +15,19 @@ class MLE_Regressor():
         self.Y = 0
         self.observations = 0
 
-    def pretrain(self, X, Y):
+    def copy(self):
+        mycopy = MLE_Regressor(self.params.copy())
+        mycopy.Y = self.Y
+        mycopy.observations = self.observations
+        return mycopy
+
+    def pretrain(self, data):
+        Y = data['Y']
         self.Y = np.mean(Y)
         self.observations += len(Y)
 
-    def retrain(self, X, Y):
+    def retrain(self, data):
+        Y = data['Y']
         new_obs = self.observations + len(Y)
         self.Y = (self.Y * self.observations + np.mean(Y) * len(Y)) / new_obs
         self.observations = new_obs
@@ -25,24 +35,39 @@ class MLE_Regressor():
     def predict(self, X):
         return np.array([self.Y for _ in range(X.shape[0])])
 
+    def evaluate(self, data):
+        return regression_metrics(data['Y'], self.predict(data['X']))
 
-class MLE_Classifier():
+
+class MLE_Classifier(MLE_Regressor):
     def __init__(self, params):
-        self.params = params
-        self.Y = None
+        super().__init__(params)
         self.num_classes = None
-        self.observations = None
 
-    def pretrain(self, X, Y):
+    def copy(self):
+        mycopy = MLE_Classifier(self.params.copy())
+        mycopy.Y = self.Y
+        mycopy.observations = self.observations
+        mycopy.num_classes = self.num_classes
+        return mycopy
+
+    def update_Y(self):
+        self.Y = np.zeros(self.num_classes)
+        self.Y[np.argmax(self.observations)] = 1
+
+    def pretrain(self, data):
+        Y = data['Y']
         self.num_classes = Y.shape[1]
         self.observations = Y.sum(0)
-        self.Y = np.zeros(num_classes)
-        self.Y[np.argmax(self.observations)] = 1
+        self.update_Y()
 
-    def retrain(self, X, Y):
+    def retrain(self, data):
+        Y = data['Y']
         self.observations += Y.sum(0)
-        self.Y = np.zeros(num_classes)
-        self.Y[np.argmax(self.observations)] = 1
+        self.update_Y()
 
     def predict(self, X):
-        return np.array([self.Y for _ in range(X.shape[0])])
+        return super().predict(X)
+
+    def evaluate(self, data):
+        return classification_metrics(data['Y'], self.predict(data['X']))
