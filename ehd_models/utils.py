@@ -25,7 +25,8 @@ def regression_metrics(truth, prediction):
     """Return a dictionary of metrics: MAE, MSE, MSLE, and MAPE"""
     result = {
         'MAE' : metrics.mean_absolute_error(truth, prediction),
-        'MAPE': metrics.mean_absolute_percentage_error(truth, prediction),
+        'MAPE': metrics.mean_absolute_percentage_error(truth[truth > 0],
+                                                       prediction[truth > 0]),
         'MSE' : metrics.mean_squared_error(truth, prediction),
         'MSLE': metrics.mean_squared_log_error(truth, prediction)
         }

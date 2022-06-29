@@ -151,8 +151,8 @@ class EHD_Loader():
 
         for p in range(len(self.names)):
             mask = self.filters_2_mask(filters, p)
-            if mask.sum() == 0:
-                import ipdb; ipdb.set_trace()
+            # if mask.sum() == 0:
+            #     import ipdb; ipdb.set_trace()
 
             if fold == p:
                 eval_set['X'] = safecat(eval_set['X'],

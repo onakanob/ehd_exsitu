@@ -10,6 +10,10 @@ from .utils import regression_metrics, classification_metrics
 
 
 class MLE_Regressor():
+    xtype = 'wave'
+    ytype = 'area'
+    filters = []
+
     def __init__(self, params):
         self.params = params
         self.Y = 0
@@ -40,6 +44,10 @@ class MLE_Regressor():
 
 
 class MLE_Classifier(MLE_Regressor):
+    xtype = 'wave'
+    ytype = 'jetted'
+    filters = []
+
     def __init__(self, params):
         super().__init__(params)
         self.num_classes = None
@@ -65,9 +73,6 @@ class MLE_Classifier(MLE_Regressor):
         Y = data['Y']
         self.observations += Y.sum(0)
         self.update_Y()
-
-    def predict(self, X):
-        return super().predict(X)
 
     def evaluate(self, data):
         return classification_metrics(data['Y'], self.predict(data['X']))

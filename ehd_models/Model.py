@@ -8,14 +8,26 @@ import numpy as np
 import pandas as pd
 
 from .mle_models import MLE_Regressor, MLE_Classifier
+from .cold_models import (RF_Regressor, MLP_Regressor,
+                          RF_Classifier, MLP_Classifier)
 from .utils import first_N_data_split
 
 
 def make_model_like(architecture, params):
+    # Cold Start Regressors
     if architecture == 'MLE':
         return MLE_Regressor(params)
+    if architecture == 'cold_RF':
+        return RF_Regressor(params)
+    if architecture == 'cold_MLP':
+        return MLP_Regressor(params)
+    # Cold Start Classifiers
     if architecture == 'MLE_class':
         return MLE_Classifier(params)
+    if architecture == 'cold_RF_class':
+        return RF_Classifier(params)
+    if architecture == 'cold_MLP_class':
+        return MLP_Classifier(params)
     else:
         raise ValueError(f"Not a valid model architecture: {architecture}")
 
@@ -55,3 +67,15 @@ class EHD_Model:
             results.append(result)
 
         return pd.DataFrame.from_dict(results)
+
+    @property
+    def xtype(self):
+        return self.model.xtype
+
+    @property
+    def ytype(self):
+        return self.model.ytype
+
+    @property
+    def filters(self):
+        return self.model.filters
