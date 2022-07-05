@@ -10,6 +10,7 @@ from .utils import regression_metrics, classification_metrics
 
 
 class MLE_Regressor():
+    pretrainer = True
     xtype = 'wave'
     ytype = 'area'
     filters = []
@@ -44,9 +45,9 @@ class MLE_Regressor():
 
 
 class MLE_Classifier(MLE_Regressor):
-    xtype = 'wave'
-    ytype = 'jetted'
-    filters = []
+    # xtype = 'wave'
+    ytype = 'jetted_selectors'
+    # filters = []
 
     def __init__(self, params):
         super().__init__(params)

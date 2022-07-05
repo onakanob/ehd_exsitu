@@ -130,3 +130,5 @@ dmypy.json
 
 Archive*
 figs*
+*.png
+*eval_summary*

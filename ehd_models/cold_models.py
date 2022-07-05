@@ -18,6 +18,7 @@ from .utils import regression_metrics, classification_metrics
 
 
 class Cold_SciKit_Model:
+    pretrainer = False
     def __init__(self, params):
         self.params = params
 
@@ -38,8 +39,9 @@ class RF_Regressor(Cold_SciKit_Model):
     # Dataset specifiers - will be passed to EHD_Loader.folded_dataset
     xtype = 'vector'
     ytype = 'area'
-    filters = [('vector', lambda x: len(x), 6)]
-    
+    # filters = [('vector', lambda x: len(x), 6)]
+    filters = []
+
     def __init__(self, params):
         super().__init__(params)
         # TODO introduce hyperparams - defaults for now
@@ -64,14 +66,15 @@ class RF_Regressor(Cold_SciKit_Model):
 class MLP_Regressor(Cold_SciKit_Model):
     xtype = 'vector'
     ytype = 'area'
-    filters = [('vector', lambda x: len(x), 6)]
+    # filters = [('vector', lambda x: len(x), 6)]
+    filters = []
 
     def __init__(self, params):
         super().__init__(params)
         # TODO introduce hyperparams - defaults for now
         self.model = Pipeline([
             ('whiten', StandardScaler()),
-            ('forest', MLPRegressor(max_iter=3000))
+            ('forestMLP', MLPRegressor(max_iter=params['max_iter']))
         ])
 
     def copy(self):
@@ -89,7 +92,8 @@ class MLP_Regressor(Cold_SciKit_Model):
 class RF_Classifier(Cold_SciKit_Model):
     xtype = 'vector'
     ytype = 'jetted'
-    filters = [('vector', lambda x: len(x), 6)]
+    # filters = [('vector', lambda x: len(x), 6)]
+    filters = []
 
     def __init__(self, params):
         super().__init__(params)
@@ -108,20 +112,22 @@ class RF_Classifier(Cold_SciKit_Model):
         pass                    # TODO
 
     def evaluate(self, data):
+        # import ipdb; ipdb.set_trace()
         return classification_metrics(data['Y'], self.predict(data['X']))
 
 
 class MLP_Classifier(Cold_SciKit_Model):
     xtype = 'vector'
     ytype = 'jetted'
-    filters = [('vector', lambda x: len(x), 6)]
+    # filters = [('vector', lambda x: len(x), 6)]
+    filters = []
 
     def __init__(self, params):
         super().__init__(params)
         # TODO introduce hyperparams
         self.model = Pipeline([
             ('whiten', StandardScaler()),
-            ('forest', MLPClassifier(max_iter=10000))
+            ('MLP', MLPClassifier(max_iter=params['max_iter']))
         ])
 
     def copy(self):

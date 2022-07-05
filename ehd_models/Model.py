@@ -38,6 +38,7 @@ class EHD_Model:
     def __init__(self, architecture, params={}):
         self.architecture = architecture
         self.model = make_model_like(architecture, params)
+        self.pretrainer = self.model.pretrainer
 
     def pretrain(self, dataset):
         self.model.pretrain(dataset)

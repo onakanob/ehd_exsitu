@@ -1,0 +1,12 @@
+* dataset
+** double check area units and high MAE values
+** t-1 return type that includes y-spec
+** for small train sizes, multiple samples from random indices in the run
+* models
+** bootstrap model ensemble and runtime selector
+** latent space inputs and runtime L-estimator
+** supervise updating L
+** recurrent L estimator
+* analysis
+** Switch from raw values to +/- dataset mean
+Larger data numbers could look better if the larger datasets happen to be easier to predict. Instead we could look at average deviation from the mean for each dataset? Just a thought.

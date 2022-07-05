@@ -119,15 +119,19 @@ class EHD_Loader():
             mask *= (df[filt[0]].apply(filt[1]) == filt[2]).astype(bool)
         return np.array(mask)
 
-    def folded_dataset(self, fold, xtype, ytype, filters=[]):
+    def folded_dataset(self, fold, xtype, ytype, pretrain=True, filters=[]):
         """
         filters - list of 3ples, each (column, function, value). Only returns
         rows of datasets where df[column].apply(function) == value for all
         3ples in the filter list."""
 
-        if not type(fold) == int:
-            raise TypeError("fold must be an integer")
-        elif fold >= len(self.names):
+        idx = self.folded_idx(filters)
+        # eval dataset is element 'fold' of the filtered idx list
+        fold = int(idx[fold])
+
+        # if not type(fold) == int:
+        #     raise TypeError("fold must be an integer")
+        if fold >= len(self.names):
             raise ValueError(f"not enough EHD datasets to create fold {fold}")
         fold_name = self.names[fold]
 
@@ -144,12 +148,20 @@ class EHD_Loader():
         elif ytype == "jetted":  # Did anything print at all?
             def jetted(p):
                 y = np.array(list(self.datasets[p]['area'] > 0))
-                return np.concatenate((y[:, None], ~y[:, None]), axis=1)
+                # return y[:, None]
+                return y
             ymethod = jetted
+        elif ytype == "jetted_selectors":
+            def jetted_select(p):
+                y = np.array(list(self.datasets[p]['area'] > 0))
+                return np.concatenate((y[:, None], ~y[:, None]), axis=1)
+            ymethod = jetted_select
         else:
             raise ValueError(f"EHD dataset with ytype {ytype} not implemented")
 
-        for p in range(len(self.names)):
+
+        # for p in range(len(self.names)):
+        for p in idx:
             mask = self.filters_2_mask(filters, p)
             # if mask.sum() == 0:
             #     import ipdb; ipdb.set_trace()
@@ -162,7 +174,7 @@ class EHD_Loader():
                 eval_set['p'] = safecat(eval_set['p'],
                                         p * np.ones(mask.sum()))
                                         # p * np.ones(len(self.datasets[p])))
-            else:
+            elif pretrain:
                 train_set['X'] = safecat(train_set['X'],
                                          xmethod(p)[mask])
                 train_set['Y'] = safecat(train_set['Y'],
@@ -177,6 +189,18 @@ class EHD_Loader():
     def __repr__(self):
         return f"EHD dataset loader with run directories: {self.names}"
 
-    @property
-    def num_folds(self):
-        return len(self.names)
+    def folded_idx(self, filters=None):
+        if filters is None:
+            return np.arange(len(self.names))
+
+        data_select = np.ones(len(self.names))
+        for filt in filters:
+            for p in range(len(self.names)):
+                data_select[p] *= self.filters_2_mask(filters, p).max()
+        return np.where(data_select)[0]
+
+    def num_folds(self, filters=None):
+        if filters is None:
+            return len(self.names)
+        return len(self.folded_idx(filters))
+
