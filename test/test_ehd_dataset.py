@@ -33,6 +33,9 @@ class TestDataset(unittest.TestCase):
         self.assertTrue(corr > 0.7)
 
 
+class TestModels(unittest.TestCase):
+    pass
+
 
 if __name__ == '__main__':
     unittest.main()
