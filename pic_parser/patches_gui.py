@@ -19,20 +19,6 @@ from .pattern_tools import (microns_into_pattern, align_pattern,
 
 
 class Micros_GUI(tk.Tk):
-    # px_per_mm = 795  # 10x Olympus: 10 Mar '22
-    # px_per_mm = 975/2  # 20x Olympus: 29 Mar '22
-
-    # scale = px_per_mm / 1e4  # SIJ patterns use units 1e-4 mm
-    # pattern_offset = [270, 310]
-    # theta = np.radians(1.4)  # degrees clockwise
-
-    # point_count = 112
-
-    # # microns:
-    # pitch = 300
-    # spacing = 500
-    # starting_offset = 16.52e3
-
     def __init__(self, paramfile):
         super().__init__()
         self.paramfile = paramfile
@@ -53,7 +39,9 @@ class Micros_GUI(tk.Tk):
 
 class Align_GUI(Micros_GUI):  # TODO
     docstring = """Make changes to pattern_params to overlay the pattern line
-    and first feature over the image. Click on the window to refresh view."""
+    and first feature over the image. The stars denote: first point, then every
+    ten experiments, and the final point. Click on the window to refresh
+    view."""
 
     def __init__(self, picture, pattern_file, paramfile):
         super().__init__(paramfile)
@@ -86,10 +74,25 @@ class Align_GUI(Micros_GUI):  # TODO
         self.pattern = align_pattern(self.pattern_file, self.scale, self.theta,
                                      self.pattern_offset)
         self.ax.clear()
-        
-        point, _ = microns_into_pattern(self.starting_offset,
-                                        self.pattern, self.px_per_mm * 1e-3)
-        display_pattern(self.pic, self.pattern, point=point, axs=self.ax)
+
+        points = []
+        # point_zero, _ = microns_into_pattern(self.starting_offset,
+        #                                 self.pattern, self.px_per_mm * 1e-3)
+        # points.append(point_zero)
+
+        # convert offset from microns to pixels
+        start = self.starting_offset * self.px_per_mm * 1e-3
+        for i in range(np.floor((self.point_count - 1)/10).astype(int) + 1):
+            p, _ = microns_into_pattern(
+                start + 10 * i * self.spacing,
+                self.pattern, 1)  # scale was: self.px_per_mm * 1e-3
+            points.append(p)
+        point_end, _ = microns_into_pattern(
+            start + (self.point_count - 1) * self.spacing,
+            self.pattern, 1)    # scale was: self.px_per_mm * 1e-3
+        points.append(point_end)
+        display_pattern(self.pic, self.pattern,
+                        point=points, axs=self.ax)
         # self.label = tk.Label(
         #     self, text=f"point: {self.point}  {point}  {angle} deg")
         # self.label.place(x=10, y=10)

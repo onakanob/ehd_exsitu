@@ -17,16 +17,12 @@ from pic_parser.patches_gui import run_alignment_gui
 
 if __name__ == "__main__":
     DIR = sys.argv[1]
-    # DIR = 'C:/Dropbox/SPEED/Self Driving EHD/Data/2-May-2022__run 2'
 
     params_file = os.path.join(DIR, "pattern_params.json")
 
     with open(params_file, 'r') as f:
         pattern_params = json.load(f)
     pic = pattern_params['picture']
-
-    # PIC = '2-may-22 run2.bmp'
-    # PATTERN = 'pattern.txt'
 
     picpath = os.path.join(DIR, pattern_params['picture'])
     patternpath = os.path.join(DIR, pattern_params['pattern'])

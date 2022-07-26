@@ -129,3 +129,6 @@ dmypy.json
 .pyre/
 
 Archive*
+figs*
+*.png
+*eval_summary*

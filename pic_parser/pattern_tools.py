@@ -108,7 +108,11 @@ def display_pattern(im, pattern, point=None, axs=None):
 
     # point, angle = points[point_idx]
     if point is not None:
-        axs.plot(point[1], point[0], '*r')
+        point = np.array(point)
+        if len(point.shape) == 1:
+            point = point[None, :]
+        for p in point:
+            axs.plot(p[1], p[0], '*r')
     return axs
 
 
