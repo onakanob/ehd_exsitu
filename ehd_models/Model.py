@@ -10,6 +10,11 @@ import pandas as pd
 from .mle_models import MLE_Regressor, MLE_Classifier
 from .cold_models import (RF_Regressor, MLP_Regressor,
                           RF_Classifier, MLP_Classifier)
+from .brute_pretrained_models import (RF_Regressor_Allpre,
+                                      RF_Classifier_Allpre,
+                                      RF_Regressor_lastXY,
+                                      RF_Classifier_lastXY)
+
 from .utils import first_N_data_split
 
 
@@ -21,6 +26,11 @@ def make_model_like(architecture, params):
         return RF_Regressor(params)
     if architecture == 'cold_MLP':
         return MLP_Regressor(params)
+    if architecture == 'all_pretrained_RF':
+        return RF_Regressor_Allpre(params)
+    if architecture == 'lastXY_RF':
+        return RF_Regressor_lastXY(params)
+
     # Cold Start Classifiers
     if architecture == 'MLE_class':
         return MLE_Classifier(params)
@@ -28,6 +38,11 @@ def make_model_like(architecture, params):
         return RF_Classifier(params)
     if architecture == 'cold_MLP_class':
         return MLP_Classifier(params)
+    if architecture == 'all_pretrained_RF_class':
+        return RF_Classifier_Allpre(params)
+    if architecture == 'lastXY_RF_class':
+        return RF_Classifier_lastXY(params)
+    
     else:
         raise ValueError(f"Not a valid model architecture: {architecture}")
 
