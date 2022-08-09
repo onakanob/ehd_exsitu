@@ -13,6 +13,7 @@ from copy import deepcopy
 from sklearn.pipeline import Pipeline
 from sklearn.preprocessing import StandardScaler
 from sklearn.ensemble import RandomForestRegressor, RandomForestClassifier
+from sklearn.neural_network import MLPRegressor, MLPClassifier
 
 from .utils import regression_metrics, classification_metrics
 
@@ -103,5 +104,35 @@ class RF_Classifier_lastXY(RF_Classifier_Allpre):
 
     def copy(self):
         mycopy = RF_Classifier_lastXY(self.params.copy())
+        mycopy.model = deepcopy(self.model)
+        return mycopy
+
+
+class MLP_Regressor_lastXY(RF_Regressor_Allpre):
+    def __init__(self, params):
+        super().__init__(params)
+        self.xtype = 'last_vector'
+        self.model = Pipeline([
+            ('whiten', StandardScaler()),
+            ('MLP', MLPRegressor(max_iter=params['max_iter']))
+        ])
+
+    def copy(self):
+        mycopy = MLP_Regressor_lastXY(self.params.copy())
+        mycopy.model = deepcopy(self.model)
+        return mycopy
+
+
+class MLP_Classifier_lastXY(RF_Classifier_Allpre):
+    def __init__(self, params):
+        super().__init__(params)
+        self.xtype = 'last_vector'
+        self.model = Pipeline([
+            ('whiten', StandardScaler()),
+            ('MLP', MLPClassifier(max_iter=params['max_iter']))
+        ])
+
+    def copy(self):
+        mycopy = MLP_Classifier_lastXY(self.params.copy())
         mycopy.model = deepcopy(self.model)
         return mycopy
