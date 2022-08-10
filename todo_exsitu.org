@@ -2,19 +2,21 @@
 ** add testing for all model training and eval functions
 
 * dataset
-** double check area units and high MAE values
-** for small train sizes, multiple samples from random indices in the run
+** DONE for small train sizes, multiple samples from random indices in the run
+CLOSED: [2022-08-09 Tue 23:02]
+** DONE double check area units and high MAE values
+CLOSED: [2022-08-09 Tue 15:53]
 ** DONE t-1 return type that includes y-spec
 CLOSED: [2022-07-26 Tue 17:23]
 
 * models
-** DONE bootstrap model ensemble and runtime selector
-CLOSED: [2022-07-26 Tue 17:24]
 ** convolutional input layer transfer?
 ** latent space inputs and runtime L-estimator
 ** supervise updating L
 ** recurrent L estimator
 
+** DONE bootstrap model ensemble and runtime selector
+CLOSED: [2022-07-26 Tue 17:24]
 * analysis
 ** Switch from raw values to +/- dataset mean
 Larger data numbers could look better if the larger datasets happen to be easier to predict. Instead we could look at average deviation from the mean for each dataset? Just a thought.

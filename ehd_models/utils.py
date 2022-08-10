@@ -6,6 +6,7 @@ Created on June 22 2022
 
 @author: Oliver Nakano-Baker
 """
+import numpy as np
 from sklearn import metrics
 from scipy.stats import pearsonr
 
@@ -14,12 +15,49 @@ def first_N_data_split(dataset, train_size, test_size):
     """Dataset is a dictionary. Create train and test dictionaries with the
     same keys. train_set gets the first train_size values, test_set gets the
     next test_size values."""
+    return random_N_data_split(dataset, train_size, test_size, first=True)
+    # train_set = {}
+    # test_set = {}
+    # for key, data in dataset.items():
+    #     train_set[key] = data[:train_size]
+    #     test_set[key] = data[train_size:train_size + test_size]
+    # return train_set, test_set
+
+
+def random_N_data_split(dataset, train_size, test_size, first=False):
+    """Dataset is a dictionary. Create train and test dictionaries with the
+    same keys. train_set gets the first train_size values, test_set gets the
+    next test_size values."""
     train_set = {}
     test_set = {}
+
+    train_idx = np.arange(train_size)
+    test_idx = np.arange(test_size) + train_size
+    if not first:               # Offset by a random allowed amount
+        max_offset = len(dataset['X']) - (train_size+test_size) + 1
+        try:
+            offset = np.random.randint(low=0, high=max_offset)
+        except:
+            import ipdb; ipdb.set_trace()
+        train_idx += offset
+        test_idx += offset
+    
     for key, data in dataset.items():
-        train_set[key] = data[:train_size]
-        test_set[key] = data[train_size:train_size + test_size]
+        train_set[key] = data[train_idx]
+        test_set[key] = data[test_idx]
     return train_set, test_set
+
+
+def dict_mean(dictionaries):
+    """dictionaries: array of dictionaries.
+    Return a dictionary where each key is drawn from the first element of the
+    input and contains the mean of all values corresponding that key in the
+    array."""
+    agg = {}
+    for key in dictionaries[0]:
+        vals = np.array([d[key] for d in dictionaries])
+        agg[key] =  np.nanmean(vals[vals != None])
+    return agg
 
 
 def safe_pearson(x, y):
