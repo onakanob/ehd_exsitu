@@ -1,4 +1,5 @@
 * codebase
+** TODO per-image threshold and min_size settings using CSV (populate w/ default values)
 ** TODO Switch these data filters to _experiment_ level inputs: xtype, ytype, filters
 ** TODO add testing for all model training and eval functions
 

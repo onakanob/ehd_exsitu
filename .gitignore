@@ -133,3 +133,4 @@ figs*
 *.png
 *eval_summary*
 *.cache
+.diff

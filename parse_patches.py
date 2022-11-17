@@ -44,8 +44,8 @@ if __name__ == "__main__":
     patches = isolate_patches(pic_path, pattern_path, pattern_params, offsets,
                               exclude=exclude)
 
-    cols = ('area', 'obj_count')
-    measurements = pd.DataFrame(columns=cols)
+    # cols = ('area', 'obj_count')
+    measurements = pd.DataFrame()
 
     def log_pic(patch, desc):
         Image.fromarray(patch).save(os.path.join(
@@ -57,18 +57,25 @@ if __name__ == "__main__":
 
     um_per_px = 1e3 / pattern_params["px_per_mm"]
 
+    print((f"Parsing patches with threshold window ({pattern_params.get('image_lowthresh')}, "
+           f"{pattern_params['image_thresh']}) & min_size "
+           f"{pattern_params['image_minsize']}"))
+
     for i, patch in patches.items():
         # image_lowthresh is optional - .get() returns None if doesn't exist
-        area, count, contours = parse_patch(patch.copy(),
+        properties, contours = parse_patch(patch.copy(),
                                     threshold=pattern_params["image_thresh"],
                                     low_thresh=pattern_params.get("image_lowthresh"),
                                     min_size=pattern_params["image_minsize"],
+                                    um_per_px=um_per_px,
                                     return_image=True)
+
         log_pic(patch, i)
-        log_pic(contours, f"{i}_contours_area {area}_count {count}")
+        log_pic(contours,
+                f"{i}_contours_area {properties['area']:.1f}_count {properties['obj_count']}")
 
         # Analytics
-        measurements.loc[i, 'area'] = um_per_px ** 2 * area
-        measurements.loc[i, 'obj_count'] = count
+        for key, value in properties.items():
+            measurements.loc[i, key] = value
 
     measurements.to_excel(output_file)
