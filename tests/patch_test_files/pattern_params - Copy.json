@@ -1,0 +1,12 @@
+{"picture": "2-may-22 run1.bmp",
+"pattern": "pattern.txt",
+"wave_file": "results 2-may-22 run1.xlsx",
+"px_per_mm": 924.5, 
+"pattern_offset": [395, 126], 
+"theta": 0, 
+"spacing": 500, 
+"pitch": 328,
+"starting_offset": 1.5e4,
+"point_count": 126,
+"image_thresh": 225,
+"image_minsize": 2}
