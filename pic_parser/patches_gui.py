@@ -36,7 +36,7 @@ class Image_Frame(tk.Frame):
 
 class Props_Frame(tk.Frame):
     def __init__(self, restack_fun):
-        ROWS = 8
+        ROWS = 9
         super().__init__()
 
         for r in range(ROWS):
@@ -44,49 +44,58 @@ class Props_Frame(tk.Frame):
         self.columnconfigure(0, weight=1)
         self.columnconfigure(1, weight=1)
 
+        r = 0
         self.elements = {}
 
-        tk.Label(self, text="Press <Enter> to save changes!").grid(row=0, column=0, sticky="w")
-
-        tk.Label(self, text="Patch Index:  ").grid(row=1, column=0, sticky="e")
+        tk.Label(self, text="Press <Enter> to save changes!").grid(row=r,
+                                                                   column=0,
+                                                                   sticky="w")
+        r += 1
+        tk.Label(self, text="Patch Index:  ").grid(row=r, column=0, sticky="e")
         self.elements['index'] = tk.IntVar()
-        tk.Entry(self, textvariable=self.elements['index']).grid(row=1,
+        tk.Entry(self, textvariable=self.elements['index']).grid(row=r,
                                                                  column=1,
                                                                  sticky="w")
-
-        tk.Label(self, text="Include Me:  ").grid(row=2, column=0, sticky="e")
+        r += 1
+        tk.Label(self, text="Include Me:  ").grid(row=r, column=0, sticky="e")
         self.elements['include_me'] = tk.IntVar()
-        tk.Checkbutton(self, variable=self.elements['include_me']).grid(row=2,
+        tk.Checkbutton(self, variable=self.elements['include_me']).grid(row=r,
                                                                      column=1,
                                                                      sticky="w")
-
-
-        tk.Label(self, text="Offset:  ").grid(row=3, column=0, sticky="e")
+        r += 1
+        tk.Label(self, text="De-Clog Event:  ").grid(row=r, column=0, sticky="e")
+        self.elements['de-clog'] = tk.IntVar()
+        tk.Checkbutton(self, variable=self.elements['de-clog']).grid(row=r,
+                                                                     column=1,
+                                                                     sticky="w")
+        r += 1
+        tk.Label(self, text="Offset:  ").grid(row=r, column=0, sticky="e")
         self.elements['offset'] = tk.StringVar(value="")
-        tk.Entry(self, textvariable=self.elements['offset']).grid(row=3,
+        tk.Entry(self, textvariable=self.elements['offset']).grid(row=r,
                                                                   column=1,
                                                                   sticky="w")
-
-        tk.Label(self, text="image_thresh:  ").grid(row=4, column=0, sticky="e")
+        r += 1
+        tk.Label(self, text="image_thresh:  ").grid(row=r, column=0, sticky="e")
         self.elements['image_thresh'] = tk.StringVar(value="")
-        tk.Entry(self, textvariable=self.elements['image_thresh']).grid(row=4,
+        tk.Entry(self, textvariable=self.elements['image_thresh']).grid(row=r,
                                                                   column=1,
                                                                   sticky="w")
-
-        tk.Label(self, text="image_lowthresh:  ").grid(row=5, column=0, sticky="e")
+        r += 1
+        tk.Label(self, text="image_lowthresh:  ").grid(row=r, column=0,
+                                                       sticky="e")
         self.elements['image_lowthresh'] = tk.StringVar(value="")
-        tk.Entry(self, textvariable=self.elements['image_lowthresh']).grid(row=5,
+        tk.Entry(self, textvariable=self.elements['image_lowthresh']).grid(row=r,
                                                                      column=1,
                                                                      sticky="w")
-
-        tk.Label(self, text="image_minsize:  ").grid(row=6, column=0, sticky="e")
+        r += 1
+        tk.Label(self, text="image_minsize:  ").grid(row=r, column=0, sticky="e")
         self.elements['image_minsize'] = tk.StringVar(value="")
-        tk.Entry(self, textvariable=self.elements['image_minsize']).grid(row=6,
+        tk.Entry(self, textvariable=self.elements['image_minsize']).grid(row=r,
                                                                    column=1,
                                                                    sticky="w")
-
-        tk.Label(self, text="positions:  ").grid(row=7, column=0, sticky="e")
-        tk.Button(self, text="restack", command=restack_fun).grid(row=7,
+        r += 1
+        tk.Label(self, text="positions:  ").grid(row=r, column=0, sticky="e")
+        tk.Button(self, text="restack", command=restack_fun).grid(row=r,
                                                                   column=1,
                                                                   sticky="w")
 
@@ -102,6 +111,13 @@ class Props_Frame(tk.Frame):
                 self.elements['include_me'].set(1)
             else:
                 self.elements['include_me'].set(0)
+
+        declog = dictionary.get('de-clog')
+        if declog is not None:
+            if declog:
+                self.elements['de-clog'].set(1)
+            else:
+                self.elements['de-clog'].set(0)
 
         offset = dictionary.get('offset')
         if offset is not None:
@@ -134,8 +150,8 @@ class Props_Frame(tk.Frame):
 
 
 class Micros_GUI(Params_Manager, tk.Tk):
-    def __init__(self, im_path, pattern_path, params_file):
-        super().__init__(params_file)
+    def __init__(self, im_path, pattern_path, params_file, cold_start=False):
+        super().__init__(params_file, cold_start=cold_start)
 
         # Static:
         self.pic = Image.open(im_path)
@@ -325,8 +341,9 @@ class Align_GUI(Micros_GUI):
     ten experiments, and the final point. Click on the window to refresh
     view.\nPress "r" to write new patch positions to the params JSON file."""
 
-    def __init__(self, im_path, pattern_path, params_file):
-        super().__init__(im_path, pattern_path, params_file)
+    def __init__(self, im_path, pattern_path, params_file, cold_start=False):
+        super().__init__(im_path, pattern_path, params_file,
+                         cold_start=cold_start)
 
         self.title("Pattern Aligner")
         self.create_widgets()
@@ -337,11 +354,11 @@ class Align_GUI(Micros_GUI):
     def create_widgets(self):
         self.pattern_fig, self.pattern_ax = plt.subplots(figsize=(12, 12))
         self.pattern_frame = Image_Frame(self.pattern_fig, self.pattern_ax)
-        self.pattern_frame.pack(fill=tk.BOTH, expand=1)
+        self.pattern_frame.pack(fill=tk.BOTH, expand=True)
         self.update_fig()
 
     def update_fig(self):
-        DISPLAY_EVERY = 5
+        DISPLAY_EVERY = 2
         self.load_paramfile()
         self.pattern = align_pattern(csv=self.pattern_path,
                                      scale=self.params['px_per_mm'] / 1e4,
@@ -373,8 +390,9 @@ class Align_GUI(Micros_GUI):
         self.initialize_params(restack_offsets=True)
 
 
-def run_alignment_gui(im_path, pattern_path, params_file, test=False):
-    app = Align_GUI(im_path, pattern_path, params_file)
+def run_alignment_gui(im_path, pattern_path, params_file, test=False,
+                      cold_start=False):
+    app = Align_GUI(im_path, pattern_path, params_file, cold_start=cold_start)
     if test:
         return app
     app.mainloop()

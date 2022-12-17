@@ -8,7 +8,7 @@
         126
     ],
     "theta": 0,
-    "spacing": 589,
+    "spacing": 590,
     "pitch": 328,
     "starting_offset": 15000.0,
     "point_count": 126,
@@ -17,13 +17,15 @@
     "image_minsize": 2,
     "0": {
         "include_me": true,
+        "de-clog": false,
         "offset": 15150,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "1": {
-        "include_me": false,
+        "include_me": true,
+        "de-clog": false,
         "offset": 15739,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -31,6 +33,7 @@
     },
     "2": {
         "include_me": true,
+        "de-clog": false,
         "offset": 16328,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -38,13 +41,15 @@
     },
     "3": {
         "include_me": true,
+        "de-clog": false,
         "offset": 16917,
         "image_thresh": null,
         "image_lowthresh": null,
-        "image_minsize": 100
+        "image_minsize": null
     },
     "4": {
         "include_me": true,
+        "de-clog": false,
         "offset": 17506,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -52,6 +57,7 @@
     },
     "5": {
         "include_me": true,
+        "de-clog": false,
         "offset": 18095,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -59,6 +65,7 @@
     },
     "6": {
         "include_me": true,
+        "de-clog": false,
         "offset": 18684,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -66,6 +73,7 @@
     },
     "7": {
         "include_me": true,
+        "de-clog": false,
         "offset": 19273,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -73,6 +81,7 @@
     },
     "8": {
         "include_me": true,
+        "de-clog": false,
         "offset": 19862,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -80,13 +89,15 @@
     },
     "9": {
         "include_me": true,
+        "de-clog": false,
         "offset": 20451,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "10": {
-        "include_me": false,
+        "include_me": true,
+        "de-clog": false,
         "offset": 21040,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -94,6 +105,7 @@
     },
     "11": {
         "include_me": true,
+        "de-clog": false,
         "offset": 21629,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -101,6 +113,7 @@
     },
     "12": {
         "include_me": true,
+        "de-clog": false,
         "offset": 22218,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -108,6 +121,7 @@
     },
     "13": {
         "include_me": true,
+        "de-clog": false,
         "offset": 22807,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -115,6 +129,7 @@
     },
     "14": {
         "include_me": true,
+        "de-clog": false,
         "offset": 23396,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -122,6 +137,7 @@
     },
     "15": {
         "include_me": true,
+        "de-clog": false,
         "offset": 23985,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -129,6 +145,7 @@
     },
     "16": {
         "include_me": true,
+        "de-clog": false,
         "offset": 24574,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -136,6 +153,7 @@
     },
     "17": {
         "include_me": true,
+        "de-clog": false,
         "offset": 25163,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -143,6 +161,7 @@
     },
     "18": {
         "include_me": true,
+        "de-clog": false,
         "offset": 25752,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -150,6 +169,7 @@
     },
     "19": {
         "include_me": true,
+        "de-clog": false,
         "offset": 26341,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -157,6 +177,7 @@
     },
     "20": {
         "include_me": true,
+        "de-clog": false,
         "offset": 26930,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -164,6 +185,7 @@
     },
     "21": {
         "include_me": true,
+        "de-clog": false,
         "offset": 27519,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -171,6 +193,7 @@
     },
     "22": {
         "include_me": true,
+        "de-clog": false,
         "offset": 28108,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -178,6 +201,7 @@
     },
     "23": {
         "include_me": true,
+        "de-clog": false,
         "offset": 28697,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -185,6 +209,7 @@
     },
     "24": {
         "include_me": true,
+        "de-clog": false,
         "offset": 29286,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -192,6 +217,7 @@
     },
     "25": {
         "include_me": true,
+        "de-clog": false,
         "offset": 29875,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -199,6 +225,7 @@
     },
     "26": {
         "include_me": true,
+        "de-clog": false,
         "offset": 30464,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -206,6 +233,7 @@
     },
     "27": {
         "include_me": true,
+        "de-clog": false,
         "offset": 31053,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -213,6 +241,7 @@
     },
     "28": {
         "include_me": true,
+        "de-clog": false,
         "offset": 31642,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -220,6 +249,7 @@
     },
     "29": {
         "include_me": true,
+        "de-clog": false,
         "offset": 32231,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -227,6 +257,7 @@
     },
     "30": {
         "include_me": true,
+        "de-clog": false,
         "offset": 32820,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -234,6 +265,7 @@
     },
     "31": {
         "include_me": true,
+        "de-clog": false,
         "offset": 33409,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -241,6 +273,7 @@
     },
     "32": {
         "include_me": true,
+        "de-clog": false,
         "offset": 33998,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -248,6 +281,7 @@
     },
     "33": {
         "include_me": true,
+        "de-clog": false,
         "offset": 34587,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -255,6 +289,7 @@
     },
     "34": {
         "include_me": true,
+        "de-clog": false,
         "offset": 35176,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -262,6 +297,7 @@
     },
     "35": {
         "include_me": true,
+        "de-clog": false,
         "offset": 35765,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -269,6 +305,7 @@
     },
     "36": {
         "include_me": true,
+        "de-clog": false,
         "offset": 36354,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -276,6 +313,7 @@
     },
     "37": {
         "include_me": true,
+        "de-clog": false,
         "offset": 36943,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -283,6 +321,7 @@
     },
     "38": {
         "include_me": true,
+        "de-clog": false,
         "offset": 37532,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -290,6 +329,7 @@
     },
     "39": {
         "include_me": true,
+        "de-clog": false,
         "offset": 38121,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -297,6 +337,7 @@
     },
     "40": {
         "include_me": true,
+        "de-clog": false,
         "offset": 38710,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -304,6 +345,7 @@
     },
     "41": {
         "include_me": true,
+        "de-clog": false,
         "offset": 39299,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -311,6 +353,7 @@
     },
     "42": {
         "include_me": true,
+        "de-clog": false,
         "offset": 39888,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -318,6 +361,7 @@
     },
     "43": {
         "include_me": true,
+        "de-clog": false,
         "offset": 40477,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -325,6 +369,7 @@
     },
     "44": {
         "include_me": true,
+        "de-clog": false,
         "offset": 41066,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -332,13 +377,15 @@
     },
     "45": {
         "include_me": true,
+        "de-clog": false,
         "offset": 41655,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "46": {
-        "include_me": false,
+        "include_me": true,
+        "de-clog": false,
         "offset": 42244,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -346,6 +393,7 @@
     },
     "47": {
         "include_me": true,
+        "de-clog": false,
         "offset": 42833,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -353,6 +401,7 @@
     },
     "48": {
         "include_me": true,
+        "de-clog": false,
         "offset": 43422,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -360,6 +409,7 @@
     },
     "49": {
         "include_me": true,
+        "de-clog": false,
         "offset": 44011,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -367,6 +417,7 @@
     },
     "50": {
         "include_me": true,
+        "de-clog": false,
         "offset": 44600,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -374,6 +425,7 @@
     },
     "51": {
         "include_me": true,
+        "de-clog": false,
         "offset": 45189,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -381,6 +433,7 @@
     },
     "52": {
         "include_me": true,
+        "de-clog": false,
         "offset": 45778,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -388,6 +441,7 @@
     },
     "53": {
         "include_me": true,
+        "de-clog": false,
         "offset": 46367,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -395,6 +449,7 @@
     },
     "54": {
         "include_me": true,
+        "de-clog": false,
         "offset": 46956,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -402,6 +457,7 @@
     },
     "55": {
         "include_me": true,
+        "de-clog": false,
         "offset": 47545,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -409,6 +465,7 @@
     },
     "56": {
         "include_me": true,
+        "de-clog": false,
         "offset": 48134,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -416,6 +473,7 @@
     },
     "57": {
         "include_me": true,
+        "de-clog": false,
         "offset": 48723,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -423,6 +481,7 @@
     },
     "58": {
         "include_me": true,
+        "de-clog": false,
         "offset": 49312,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -430,6 +489,7 @@
     },
     "59": {
         "include_me": true,
+        "de-clog": false,
         "offset": 49901,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -437,6 +497,7 @@
     },
     "60": {
         "include_me": true,
+        "de-clog": false,
         "offset": 50490,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -444,6 +505,7 @@
     },
     "61": {
         "include_me": true,
+        "de-clog": false,
         "offset": 51079,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -451,6 +513,7 @@
     },
     "62": {
         "include_me": true,
+        "de-clog": false,
         "offset": 51668,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -458,6 +521,7 @@
     },
     "63": {
         "include_me": true,
+        "de-clog": false,
         "offset": 52257,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -465,6 +529,7 @@
     },
     "64": {
         "include_me": true,
+        "de-clog": false,
         "offset": 52846,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -472,6 +537,7 @@
     },
     "65": {
         "include_me": true,
+        "de-clog": false,
         "offset": 53435,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -479,6 +545,7 @@
     },
     "66": {
         "include_me": true,
+        "de-clog": false,
         "offset": 54024,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -486,6 +553,7 @@
     },
     "67": {
         "include_me": true,
+        "de-clog": false,
         "offset": 54613,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -493,6 +561,7 @@
     },
     "68": {
         "include_me": true,
+        "de-clog": false,
         "offset": 55202,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -500,6 +569,7 @@
     },
     "69": {
         "include_me": true,
+        "de-clog": false,
         "offset": 55791,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -507,6 +577,7 @@
     },
     "70": {
         "include_me": true,
+        "de-clog": false,
         "offset": 56380,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -514,6 +585,7 @@
     },
     "71": {
         "include_me": true,
+        "de-clog": false,
         "offset": 56969,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -521,6 +593,7 @@
     },
     "72": {
         "include_me": true,
+        "de-clog": false,
         "offset": 57558,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -528,6 +601,7 @@
     },
     "73": {
         "include_me": true,
+        "de-clog": false,
         "offset": 58147,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -535,6 +609,7 @@
     },
     "74": {
         "include_me": true,
+        "de-clog": false,
         "offset": 58736,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -542,6 +617,7 @@
     },
     "75": {
         "include_me": true,
+        "de-clog": false,
         "offset": 59325,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -549,6 +625,7 @@
     },
     "76": {
         "include_me": true,
+        "de-clog": false,
         "offset": 59914,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -556,6 +633,7 @@
     },
     "77": {
         "include_me": true,
+        "de-clog": false,
         "offset": 60503,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -563,6 +641,7 @@
     },
     "78": {
         "include_me": true,
+        "de-clog": false,
         "offset": 61092,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -570,6 +649,7 @@
     },
     "79": {
         "include_me": true,
+        "de-clog": false,
         "offset": 61681,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -577,6 +657,7 @@
     },
     "80": {
         "include_me": true,
+        "de-clog": false,
         "offset": 62270,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -584,6 +665,7 @@
     },
     "81": {
         "include_me": true,
+        "de-clog": false,
         "offset": 62859,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -591,6 +673,7 @@
     },
     "82": {
         "include_me": true,
+        "de-clog": false,
         "offset": 63448,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -598,6 +681,7 @@
     },
     "83": {
         "include_me": true,
+        "de-clog": false,
         "offset": 64037,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -605,6 +689,7 @@
     },
     "84": {
         "include_me": true,
+        "de-clog": false,
         "offset": 64626,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -612,6 +697,7 @@
     },
     "85": {
         "include_me": true,
+        "de-clog": false,
         "offset": 65215,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -619,6 +705,7 @@
     },
     "86": {
         "include_me": true,
+        "de-clog": false,
         "offset": 65804,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -626,6 +713,7 @@
     },
     "87": {
         "include_me": true,
+        "de-clog": false,
         "offset": 66393,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -633,6 +721,7 @@
     },
     "88": {
         "include_me": true,
+        "de-clog": false,
         "offset": 66982,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -640,6 +729,7 @@
     },
     "89": {
         "include_me": true,
+        "de-clog": false,
         "offset": 67571,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -647,6 +737,7 @@
     },
     "90": {
         "include_me": true,
+        "de-clog": false,
         "offset": 68160,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -654,6 +745,7 @@
     },
     "91": {
         "include_me": true,
+        "de-clog": false,
         "offset": 68749,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -661,6 +753,7 @@
     },
     "92": {
         "include_me": true,
+        "de-clog": false,
         "offset": 69338,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -668,6 +761,7 @@
     },
     "93": {
         "include_me": true,
+        "de-clog": false,
         "offset": 69927,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -675,6 +769,7 @@
     },
     "94": {
         "include_me": true,
+        "de-clog": false,
         "offset": 70516,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -682,6 +777,7 @@
     },
     "95": {
         "include_me": true,
+        "de-clog": false,
         "offset": 71105,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -689,6 +785,7 @@
     },
     "96": {
         "include_me": true,
+        "de-clog": false,
         "offset": 71694,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -696,6 +793,7 @@
     },
     "97": {
         "include_me": true,
+        "de-clog": false,
         "offset": 72283,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -703,6 +801,7 @@
     },
     "98": {
         "include_me": true,
+        "de-clog": false,
         "offset": 72872,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -710,13 +809,15 @@
     },
     "99": {
         "include_me": true,
+        "de-clog": false,
         "offset": 73461,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "100": {
-        "include_me": false,
+        "include_me": true,
+        "de-clog": false,
         "offset": 74050,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -724,6 +825,7 @@
     },
     "101": {
         "include_me": true,
+        "de-clog": false,
         "offset": 74639,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -731,6 +833,7 @@
     },
     "102": {
         "include_me": true,
+        "de-clog": false,
         "offset": 75228,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -738,6 +841,7 @@
     },
     "103": {
         "include_me": true,
+        "de-clog": false,
         "offset": 75817,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -745,6 +849,7 @@
     },
     "104": {
         "include_me": true,
+        "de-clog": false,
         "offset": 76406,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -752,6 +857,7 @@
     },
     "105": {
         "include_me": true,
+        "de-clog": false,
         "offset": 76995,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -759,6 +865,7 @@
     },
     "106": {
         "include_me": true,
+        "de-clog": false,
         "offset": 77584,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -766,6 +873,7 @@
     },
     "107": {
         "include_me": true,
+        "de-clog": false,
         "offset": 78173,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -773,6 +881,7 @@
     },
     "108": {
         "include_me": true,
+        "de-clog": false,
         "offset": 78762,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -780,6 +889,7 @@
     },
     "109": {
         "include_me": true,
+        "de-clog": false,
         "offset": 79351,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -787,6 +897,7 @@
     },
     "110": {
         "include_me": true,
+        "de-clog": false,
         "offset": 79940,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -794,6 +905,7 @@
     },
     "111": {
         "include_me": true,
+        "de-clog": false,
         "offset": 80529,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -801,6 +913,7 @@
     },
     "112": {
         "include_me": true,
+        "de-clog": false,
         "offset": 81118,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -808,6 +921,7 @@
     },
     "113": {
         "include_me": true,
+        "de-clog": false,
         "offset": 81707,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -815,6 +929,7 @@
     },
     "114": {
         "include_me": true,
+        "de-clog": false,
         "offset": 82296,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -822,6 +937,7 @@
     },
     "115": {
         "include_me": true,
+        "de-clog": false,
         "offset": 82885,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -829,6 +945,7 @@
     },
     "116": {
         "include_me": true,
+        "de-clog": false,
         "offset": 83474,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -836,13 +953,15 @@
     },
     "117": {
         "include_me": true,
+        "de-clog": false,
         "offset": 84063,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "118": {
-        "include_me": false,
+        "include_me": true,
+        "de-clog": false,
         "offset": 84652,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -850,6 +969,7 @@
     },
     "119": {
         "include_me": true,
+        "de-clog": false,
         "offset": 85241,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -857,6 +977,7 @@
     },
     "120": {
         "include_me": true,
+        "de-clog": false,
         "offset": 85830,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -864,6 +985,7 @@
     },
     "121": {
         "include_me": true,
+        "de-clog": false,
         "offset": 86419,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -871,6 +993,7 @@
     },
     "122": {
         "include_me": true,
+        "de-clog": false,
         "offset": 87008,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -878,6 +1001,7 @@
     },
     "123": {
         "include_me": true,
+        "de-clog": false,
         "offset": 87597,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -885,6 +1009,7 @@
     },
     "124": {
         "include_me": true,
+        "de-clog": false,
         "offset": 88186,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -892,6 +1017,7 @@
     },
     "125": {
         "include_me": true,
+        "de-clog": false,
         "offset": 88775,
         "image_thresh": null,
         "image_lowthresh": null,

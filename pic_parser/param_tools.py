@@ -23,17 +23,18 @@ def keys_to_ints(dictionary):
 
 class Params_Manager():
     DEFAULT_DICT = {'include_me': True,
+                    'de-clog': False,
                     'offset': None,
                     'image_thresh': None,
                     'image_lowthresh': None,
                     'image_minsize': None}
 
-    def __init__(self, paramfile):
+    def __init__(self, paramfile, cold_start=False):
         super().__init__()
         self.paramfile = paramfile
         self.params = None
         self.load_paramfile()
-        self.initialize_params()
+        self.initialize_params(cold_start=cold_start)
 
     def load_paramfile(self):
         with open(self.paramfile, 'r') as f:
@@ -60,11 +61,11 @@ class Params_Manager():
         return np.array(offsets).astype(int)
 
 
-    def initialize_params(self, restack_offsets=False):
+    def initialize_params(self, restack_offsets=False, cold_start=False):
         offsets = self.stack_offsets()
         for i in range(self.params['point_count']):
-            if self.params.get(i) is None:
+            if (self.params.get(i) is None) or cold_start:
                 self.params[i] = self.DEFAULT_DICT.copy()
-            if (self.params[i]['offset'] is None) or (restack_offsets):
+            if (self.params[i]['offset'] is None) or restack_offsets:
                 self.params[i]['offset'] = int(offsets[i])
         self.write_paramfile()
