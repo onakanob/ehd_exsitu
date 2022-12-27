@@ -6,7 +6,7 @@ Created on 15 December 2022
 
 @author: Oliver Nakano-Baker
 """
-import json
+import os, json
 
 import numpy as np
 
@@ -21,24 +21,44 @@ def keys_to_ints(dictionary):
     return d
 
 
-class Params_Manager():
+class Params_Reader():
+    def __init__(self, paramfile):
+        self.paramfile = paramfile
+        self.params = None
+        self.load_paramfile()
+
+    def load_paramfile(self):
+        with open(self.paramfile, 'r') as f:
+            self.params = json.load(f, object_hook=keys_to_ints)
+
+    def pic_path(self):
+        return os.path.join(os.path.dirname(self.paramfile),
+                            self.params['picture'])
+
+    def pattern_path(self):
+        return os.path.join(os.path.dirname(self.paramfile),
+                            self.params['pattern'])
+
+    def retrieve(self, i, key):
+        """Return the key associated with patch i. If that key is None in the
+        dictionary, return the default value."""
+        value = self.params[i].get(key)
+        if value is None:
+            return self.params.get(key)
+        return value
+
+
+class Params_Manager(Params_Reader):
     DEFAULT_DICT = {'include_me': True,
-                    'de-clog': False,
+                    'de_clog': False,
                     'offset': None,
                     'image_thresh': None,
                     'image_lowthresh': None,
                     'image_minsize': None}
 
     def __init__(self, paramfile, cold_start=False):
-        super().__init__()
-        self.paramfile = paramfile
-        self.params = None
-        self.load_paramfile()
+        super().__init__(paramfile)
         self.initialize_params(cold_start=cold_start)
-
-    def load_paramfile(self):
-        with open(self.paramfile, 'r') as f:
-            self.params = json.load(f, object_hook=keys_to_ints)
 
     def write_paramfile(self):
         with open(self.paramfile, 'w', encoding="utf-8") as f:
@@ -47,11 +67,13 @@ class Params_Manager():
                       indent=4)
             print(f'Wrote to {self.paramfile}')
 
-
     def stack_offsets(self, idx=0, spacing=None):
         """Calculate the position of points above idx using the specified
         spacing."""             # TODO this doesn't work
-        offsets = [self.params[idx]['offset']]
+        if idx == 0:
+            offsets = [self.params['starting_offset']]
+        else:
+            offsets = [self.params.get(idx).get('offset')]
         if spacing is None:
             spacing = self.params['spacing']
         for _ in range(idx+1, self.params['point_count']):
@@ -59,7 +81,6 @@ class Params_Manager():
         # offsets = np.arange(idx, self.params['point_count']) * spacing\
         #     + self.params['starting_offset']
         return np.array(offsets).astype(int)
-
 
     def initialize_params(self, restack_offsets=False, cold_start=False):
         offsets = self.stack_offsets()

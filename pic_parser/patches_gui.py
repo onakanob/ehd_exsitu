@@ -10,12 +10,11 @@ import numpy as np
 import tkinter as tk
 import matplotlib.pyplot as plt
 from matplotlib.backends.backend_tkagg import FigureCanvasTkAgg
-from PIL import Image
-from PIL.ImageOps import grayscale
 
 from .pattern_tools import (microns_into_pattern, align_pattern,
                             display_pattern, patchmaker)
-from .patch_tools import parse_patch
+from .patch_tools import (parse_patch, histogram_patches,
+                          open_and_preprocess_pic)
 from .param_tools import Params_Manager
 
 
@@ -64,8 +63,8 @@ class Props_Frame(tk.Frame):
                                                                      sticky="w")
         r += 1
         tk.Label(self, text="De-Clog Event:  ").grid(row=r, column=0, sticky="e")
-        self.elements['de-clog'] = tk.IntVar()
-        tk.Checkbutton(self, variable=self.elements['de-clog']).grid(row=r,
+        self.elements['de_clog'] = tk.IntVar()
+        tk.Checkbutton(self, variable=self.elements['de_clog']).grid(row=r,
                                                                      column=1,
                                                                      sticky="w")
         r += 1
@@ -112,12 +111,12 @@ class Props_Frame(tk.Frame):
             else:
                 self.elements['include_me'].set(0)
 
-        declog = dictionary.get('de-clog')
+        declog = dictionary.get('de_clog')
         if declog is not None:
             if declog:
-                self.elements['de-clog'].set(1)
+                self.elements['de_clog'].set(1)
             else:
-                self.elements['de-clog'].set(0)
+                self.elements['de_clog'].set(0)
 
         offset = dictionary.get('offset')
         if offset is not None:
@@ -141,23 +140,27 @@ class Props_Frame(tk.Frame):
             include_me = True
         else:
             include_me = False
-        return {'index':     int(self.elements['index'].get()),
-                'include_me':   include_me,
-                'offset':    int(self.elements['offset'].get()),
+        if self.elements['de_clog'].get():
+            de_clog = True
+        else:
+            de_clog = False
+        return {'index':           int(self.elements['index'].get()),
+                'include_me':      include_me,
+                'de_clog':         de_clog,
+                'offset':          int(self.elements['offset'].get()),
                 'image_thresh':    int(self.elements['image_thresh'].get()),
                 'image_lowthresh': int(self.elements['image_lowthresh'].get()),
                 'image_minsize':   int(self.elements['image_minsize'].get())}
 
 
 class Micros_GUI(Params_Manager, tk.Tk):
-    def __init__(self, im_path, pattern_path, params_file, cold_start=False):
-        super().__init__(params_file, cold_start=cold_start)
+    def __init__(self, params_file, cold_start=False):
+        Params_Manager.__init__(self, params_file, cold_start=cold_start)
+        tk.Tk.__init__(self)
 
         # Static:
-        self.pic = Image.open(im_path)
-        self.pic = np.fliplr(np.flipud(np.array(grayscale(self.pic)).T))
-        self.pattern_path = pattern_path
-        self.pattern = align_pattern(csv=pattern_path,
+        self.pic = open_and_preprocess_pic(self.pic_path())
+        self.pattern = align_pattern(csv=self.pattern_path(),
                                      scale=self.params['px_per_mm'] / 1e4,
                                      theta=self.params['theta'],
                                      offset=self.params['pattern_offset'])
@@ -166,8 +169,9 @@ class Micros_GUI(Params_Manager, tk.Tk):
 
 
 class Patches_GUI(Micros_GUI):
-    def __init__(self, im_path, pattern_path, params_file):
-        super().__init__(im_path, pattern_path, params_file)
+    # def __init__(self, im_path, pattern_path, params_file):
+    def __init__(self, params_file):
+        super().__init__(params_file)
 
         self.title("Patches Selector")
 
@@ -218,12 +222,15 @@ class Patches_GUI(Micros_GUI):
 
     def render_patch(self, point, angle):
         patch = patchmaker(self.pic,
-                           self.params['spacing'],
-                           self.params['pitch'],
+                           self.params['spacing'] * self.params['px_per_mm']\
+                               * 1e-3 * 1.2,
+                           self.params['pitch'] * self.params['px_per_mm']\
+                               * 1e-3 * 1.5,
                            int(point[0]), int(point[1]),
                            angle)
+        # import ipdb; ipdb.set_trace()
 
-        _, _, threshold, low_thresh, min_size = self.get_patch_params()
+        _, _, _, threshold, low_thresh, min_size = self.get_patch_params()
         _, contours = parse_patch(patch.copy(),
                             threshold=threshold,
                             low_thresh=low_thresh,
@@ -247,11 +254,13 @@ class Patches_GUI(Micros_GUI):
 
 
     def update_input_frame(self):
-        include_me, offset, image_thresh, image_lowthresh, image_minsize = self.get_patch_params()
+        include_me, offset, de_clog, image_thresh,\
+            image_lowthresh, image_minsize = self.get_patch_params()
     
         self.inputs_frame.set_vals({'index': self.loc,
                                     'include_me': include_me,
                                     'offset': offset,
+                                    'de_clog': de_clog,
                                     'image_thresh': image_thresh,
                                     'image_lowthresh': image_lowthresh,
                                     'image_minsize': image_minsize})
@@ -263,6 +272,7 @@ class Patches_GUI(Micros_GUI):
 
         include_me = self.params[loc]['include_me']
         offset = self.params[loc]['offset']
+        de_clog = self.params[loc]['de_clog']
 
         threshold = self.params[loc]['image_thresh']
         if threshold is None:
@@ -276,7 +286,7 @@ class Patches_GUI(Micros_GUI):
         if min_size is None:
             min_size = self.params['image_minsize']
 
-        return include_me, offset, threshold, low_thresh, min_size
+        return include_me, offset, de_clog, threshold, low_thresh, min_size
 
 
     def set_patch_params(self, new_params, loc=None):
@@ -328,8 +338,8 @@ class Patches_GUI(Micros_GUI):
         self.write_paramfile()
 
 
-def run_patches_gui(im_path, pattern_path, params_file, test=False):
-    app = Patches_GUI(im_path, pattern_path, params_file)
+def run_patches_gui(params_file, test=False):
+    app = Patches_GUI(params_file)
     if test:                    # return the GUI object for unit tests
         return app
     app.mainloop()              # Run the GUI
@@ -338,12 +348,15 @@ def run_patches_gui(im_path, pattern_path, params_file, test=False):
 class Align_GUI(Micros_GUI):
     docstring="""Make changes to pattern_params to overlay the pattern line
     and first feature over the image. The stars denote: first point, then every
-    ten experiments, and the final point. Click on the window to refresh
-    view.\nPress "r" to write new patch positions to the params JSON file."""
+    two experiments, and the final point. Click on the window to refresh
+    view. Press 'r' to repopulate all point offsets in the params file."""
 
-    def __init__(self, im_path, pattern_path, params_file, cold_start=False):
-        super().__init__(im_path, pattern_path, params_file,
-                         cold_start=cold_start)
+    def __init__(self, params_file, cold_start=False):
+        super().__init__(params_file, cold_start=cold_start)
+
+        histogram_patches({'pic': self.pic}, bins=128, xlim=(90, 256),
+                          output=os.path.join(os.path.dirname(params_file),
+                                              'brightness_histogram.png'))
 
         self.title("Pattern Aligner")
         self.create_widgets()
@@ -360,7 +373,7 @@ class Align_GUI(Micros_GUI):
     def update_fig(self):
         DISPLAY_EVERY = 2
         self.load_paramfile()
-        self.pattern = align_pattern(csv=self.pattern_path,
+        self.pattern = align_pattern(csv=self.pattern_path(),
                                      scale=self.params['px_per_mm'] / 1e4,
                                      theta=self.params['theta'],
                                      offset=self.params['pattern_offset'])
@@ -390,9 +403,9 @@ class Align_GUI(Micros_GUI):
         self.initialize_params(restack_offsets=True)
 
 
-def run_alignment_gui(im_path, pattern_path, params_file, test=False,
+def run_alignment_gui(params_file, test=False,
                       cold_start=False):
-    app = Align_GUI(im_path, pattern_path, params_file, cold_start=cold_start)
+    app = Align_GUI(params_file, cold_start=cold_start)
     if test:
         return app
     app.mainloop()

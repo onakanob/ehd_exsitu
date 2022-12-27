@@ -17,7 +17,7 @@ import numpy as np
 
 sys.path.append('..')
 from pic_parser.patch_tools import (isolate_patches, parse_patch,
-                                    histogram_patches)
+                                    histogram_patches, parse_patches)
 
 
 def test_patches():
@@ -65,5 +65,12 @@ def test_patches():
     assert contours.dtype == "uint8"
 
 
+def test_parser():
+    DIR = "./patch_test_files"
+    params_file = os.path.join(DIR, "pattern_params.json")
+    parse_patches(params_file=params_file, test=True)
+
+
 if __name__ == "__main__":
+    test_parser()
     test_patches()

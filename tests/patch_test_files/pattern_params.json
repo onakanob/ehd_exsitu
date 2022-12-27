@@ -10,14 +10,14 @@
     "theta": 0,
     "spacing": 590,
     "pitch": 328,
-    "starting_offset": 15000.0,
+    "starting_offset": 15150,
     "point_count": 126,
     "image_thresh": 225,
     "image_lowthresh": 0,
     "image_minsize": 2,
     "0": {
         "include_me": true,
-        "de-clog": false,
+        "de_clog": false,
         "offset": 15150,
         "image_thresh": null,
         "image_lowthresh": null,
@@ -25,1000 +25,1000 @@
     },
     "1": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 15739,
+        "de_clog": false,
+        "offset": 15740,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "2": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 16328,
+        "de_clog": false,
+        "offset": 16330,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "3": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 16917,
+        "de_clog": false,
+        "offset": 16920,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "4": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 17506,
+        "de_clog": false,
+        "offset": 17510,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "5": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 18095,
+        "de_clog": false,
+        "offset": 18100,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "6": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 18684,
+        "de_clog": false,
+        "offset": 18690,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "7": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 19273,
+        "de_clog": false,
+        "offset": 19280,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "8": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 19862,
+        "de_clog": false,
+        "offset": 19870,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "9": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 20451,
+        "de_clog": false,
+        "offset": 20460,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "10": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 21040,
+        "de_clog": false,
+        "offset": 21050,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "11": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 21629,
+        "de_clog": false,
+        "offset": 21640,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "12": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 22218,
+        "de_clog": false,
+        "offset": 22230,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "13": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 22807,
+        "de_clog": false,
+        "offset": 22820,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "14": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 23396,
+        "de_clog": false,
+        "offset": 23410,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "15": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 23985,
+        "de_clog": false,
+        "offset": 24000,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "16": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 24574,
+        "de_clog": false,
+        "offset": 24590,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "17": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 25163,
+        "de_clog": false,
+        "offset": 25180,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "18": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 25752,
+        "de_clog": false,
+        "offset": 25770,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "19": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 26341,
+        "de_clog": false,
+        "offset": 26360,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "20": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 26930,
+        "de_clog": false,
+        "offset": 26950,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "21": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 27519,
+        "de_clog": false,
+        "offset": 27540,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "22": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 28108,
+        "de_clog": false,
+        "offset": 28130,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "23": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 28697,
+        "de_clog": false,
+        "offset": 28720,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "24": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 29286,
+        "de_clog": false,
+        "offset": 29310,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "25": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 29875,
+        "de_clog": false,
+        "offset": 29900,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "26": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 30464,
+        "de_clog": false,
+        "offset": 30490,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "27": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 31053,
+        "de_clog": false,
+        "offset": 31080,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "28": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 31642,
+        "de_clog": false,
+        "offset": 31670,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "29": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 32231,
+        "de_clog": false,
+        "offset": 32260,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "30": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 32820,
+        "de_clog": false,
+        "offset": 32850,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "31": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 33409,
+        "de_clog": false,
+        "offset": 33440,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "32": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 33998,
+        "de_clog": false,
+        "offset": 34030,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "33": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 34587,
+        "de_clog": false,
+        "offset": 34620,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "34": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 35176,
+        "de_clog": false,
+        "offset": 35210,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "35": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 35765,
+        "de_clog": false,
+        "offset": 35800,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "36": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 36354,
+        "de_clog": false,
+        "offset": 36390,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "37": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 36943,
+        "de_clog": false,
+        "offset": 36980,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "38": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 37532,
+        "de_clog": false,
+        "offset": 37570,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "39": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 38121,
+        "de_clog": false,
+        "offset": 38160,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "40": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 38710,
+        "de_clog": false,
+        "offset": 38750,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "41": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 39299,
+        "de_clog": false,
+        "offset": 39340,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "42": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 39888,
+        "de_clog": false,
+        "offset": 39930,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "43": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 40477,
+        "de_clog": false,
+        "offset": 40520,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "44": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 41066,
+        "de_clog": false,
+        "offset": 41110,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "45": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 41655,
+        "de_clog": false,
+        "offset": 41700,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "46": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 42244,
+        "de_clog": false,
+        "offset": 42290,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "47": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 42833,
+        "de_clog": false,
+        "offset": 42880,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "48": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 43422,
+        "de_clog": false,
+        "offset": 43470,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "49": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 44011,
+        "de_clog": false,
+        "offset": 44060,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "50": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 44600,
+        "de_clog": false,
+        "offset": 44650,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "51": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 45189,
+        "de_clog": false,
+        "offset": 45240,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "52": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 45778,
+        "de_clog": false,
+        "offset": 45830,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "53": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 46367,
+        "de_clog": false,
+        "offset": 46420,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "54": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 46956,
+        "de_clog": false,
+        "offset": 47010,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "55": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 47545,
+        "de_clog": false,
+        "offset": 47600,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "56": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 48134,
+        "de_clog": false,
+        "offset": 48190,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "57": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 48723,
+        "de_clog": false,
+        "offset": 48780,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "58": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 49312,
+        "de_clog": false,
+        "offset": 49370,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "59": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 49901,
+        "de_clog": false,
+        "offset": 49960,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "60": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 50490,
+        "de_clog": false,
+        "offset": 50550,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "61": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 51079,
+        "de_clog": false,
+        "offset": 51140,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "62": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 51668,
+        "de_clog": false,
+        "offset": 51730,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "63": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 52257,
+        "de_clog": false,
+        "offset": 52320,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "64": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 52846,
+        "de_clog": false,
+        "offset": 52910,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "65": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 53435,
+        "de_clog": false,
+        "offset": 53500,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "66": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 54024,
+        "de_clog": false,
+        "offset": 54090,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "67": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 54613,
+        "de_clog": false,
+        "offset": 54680,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "68": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 55202,
+        "de_clog": false,
+        "offset": 55270,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "69": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 55791,
+        "de_clog": false,
+        "offset": 55860,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "70": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 56380,
+        "de_clog": false,
+        "offset": 56450,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "71": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 56969,
+        "de_clog": false,
+        "offset": 57040,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "72": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 57558,
+        "de_clog": false,
+        "offset": 57630,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "73": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 58147,
+        "de_clog": false,
+        "offset": 58220,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "74": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 58736,
+        "de_clog": false,
+        "offset": 58810,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "75": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 59325,
+        "de_clog": false,
+        "offset": 59400,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "76": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 59914,
+        "de_clog": false,
+        "offset": 59990,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "77": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 60503,
+        "de_clog": false,
+        "offset": 60580,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "78": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 61092,
+        "de_clog": false,
+        "offset": 61170,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "79": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 61681,
+        "de_clog": false,
+        "offset": 61760,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "80": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 62270,
+        "de_clog": false,
+        "offset": 62350,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "81": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 62859,
+        "de_clog": false,
+        "offset": 62940,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "82": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 63448,
+        "de_clog": false,
+        "offset": 63530,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "83": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 64037,
+        "de_clog": false,
+        "offset": 64120,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "84": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 64626,
+        "de_clog": false,
+        "offset": 64710,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "85": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 65215,
+        "de_clog": false,
+        "offset": 65300,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "86": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 65804,
+        "de_clog": false,
+        "offset": 65890,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "87": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 66393,
+        "de_clog": false,
+        "offset": 66480,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "88": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 66982,
+        "de_clog": false,
+        "offset": 67070,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "89": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 67571,
+        "de_clog": false,
+        "offset": 67660,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "90": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 68160,
+        "de_clog": false,
+        "offset": 68250,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "91": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 68749,
+        "de_clog": false,
+        "offset": 68840,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "92": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 69338,
+        "de_clog": false,
+        "offset": 69430,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "93": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 69927,
+        "de_clog": false,
+        "offset": 70020,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "94": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 70516,
+        "de_clog": false,
+        "offset": 70610,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "95": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 71105,
+        "de_clog": false,
+        "offset": 71200,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "96": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 71694,
+        "de_clog": false,
+        "offset": 71790,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "97": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 72283,
+        "de_clog": false,
+        "offset": 72380,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "98": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 72872,
+        "de_clog": false,
+        "offset": 72970,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "99": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 73461,
+        "de_clog": false,
+        "offset": 73560,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "100": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 74050,
+        "de_clog": false,
+        "offset": 74150,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "101": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 74639,
+        "de_clog": false,
+        "offset": 74740,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "102": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 75228,
+        "de_clog": false,
+        "offset": 75330,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "103": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 75817,
+        "de_clog": false,
+        "offset": 75920,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "104": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 76406,
+        "de_clog": false,
+        "offset": 76510,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "105": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 76995,
+        "de_clog": false,
+        "offset": 77100,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "106": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 77584,
+        "de_clog": false,
+        "offset": 77690,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "107": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 78173,
+        "de_clog": false,
+        "offset": 78280,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "108": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 78762,
+        "de_clog": false,
+        "offset": 78870,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "109": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 79351,
+        "de_clog": false,
+        "offset": 79460,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "110": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 79940,
+        "de_clog": false,
+        "offset": 80050,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "111": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 80529,
+        "de_clog": false,
+        "offset": 80640,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "112": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 81118,
+        "de_clog": false,
+        "offset": 81230,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "113": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 81707,
+        "de_clog": false,
+        "offset": 81820,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "114": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 82296,
+        "de_clog": false,
+        "offset": 82410,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "115": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 82885,
+        "de_clog": false,
+        "offset": 83000,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "116": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 83474,
+        "de_clog": false,
+        "offset": 83590,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "117": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 84063,
+        "de_clog": false,
+        "offset": 84180,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "118": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 84652,
+        "de_clog": false,
+        "offset": 84770,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "119": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 85241,
+        "de_clog": false,
+        "offset": 85360,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "120": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 85830,
+        "de_clog": false,
+        "offset": 85950,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "121": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 86419,
+        "de_clog": false,
+        "offset": 86540,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "122": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 87008,
+        "de_clog": false,
+        "offset": 87130,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "123": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 87597,
+        "de_clog": false,
+        "offset": 87720,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "124": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 88186,
+        "de_clog": false,
+        "offset": 88310,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null
     },
     "125": {
         "include_me": true,
-        "de-clog": false,
-        "offset": 88775,
+        "de_clog": false,
+        "offset": 88900,
         "image_thresh": null,
         "image_lowthresh": null,
         "image_minsize": null

@@ -23,7 +23,7 @@ from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
 def ehd_dir2data(directory, wavefile, um_per_px):
-    MEAS_PATH = 'logs/measurements.xlsx'
+    MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
     waves = pd.read_excel(wavefile, index_col=0)
@@ -40,13 +40,12 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     auac = waves.wave.apply(lambda x: np.sum(np.abs(x)))
 
     corrs = []
-    max_offset = 20
+    max_offset = 40
     for offset in range(max_offset):
         corr, _, _ = correlate_dfs(dots, 'area', auac, None, offset)
         corrs.append(corr)
     offset = np.argmax(corrs)
     _, Aidx, Bidx = correlate_dfs(dots, 'area', auac, None, offset)
-    print(f'dataset {directory}\toffset {offset}\tcorr {np.max(corrs)}')
 
     dots = dots.loc[Aidx]
 
@@ -64,6 +63,7 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     # print(corr)
     # corr, _ = pearsonr(dots.area, dots.vector.apply(lambda x: np.sqrt(np.sum(x**2))))
     # print(corr)
+    print(f'dataset {directory}\t{len(dots)} points\toffset {offset}\tcorr {np.max(corrs)}')
 
     return dots
 

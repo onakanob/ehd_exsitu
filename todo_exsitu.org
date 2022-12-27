@@ -1,8 +1,18 @@
 * codebase
-** DONE per-image threshold and min_size settings using CSV (populate w/ default values)
-CLOSED: [2022-12-16 Fri 21:40]
+** TODO Make image preprocessing steps selectable (patch_tools:43, patches_gui:164)
 ** TODO Switch these data filters to _experiment_ level inputs: xtype, ytype, filters
 ** TODO add testing for all model training and eval functions
+
+** DONE finish modifying run script for all-in-one entry point. 
+CLOSED: [2022-12-26 Mon 22:09]
+*** DONE run through it with one dataset, just to be sure.
+CLOSED: [2022-12-26 Mon 22:09]
+*** DONE Add cold-start binary switch to the run script.
+CLOSED: [2022-12-24 Sat 15:52]
+** DONE per-image threshold and min_size settings using CSV (populate w/ default values)
+CLOSED: [2022-12-16 Fri 21:40]
+** DONE pipe "declog" to the actual json file
+CLOSED: [2022-12-24 Sat 16:40]
 
 * dataset
 ** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
