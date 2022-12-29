@@ -22,7 +22,7 @@ from matplotlib import pyplot as plt
 from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
-def ehd_dir2data(directory, wavefile, um_per_px):
+def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
     MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
@@ -40,7 +40,6 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     auac = waves.wave.apply(lambda x: np.sum(np.abs(x)))
 
     corrs = []
-    max_offset = 40
     for offset in range(max_offset):
         corr, _, _ = correlate_dfs(dots, 'area', auac, None, offset)
         corrs.append(corr)

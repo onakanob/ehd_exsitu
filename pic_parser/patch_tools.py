@@ -70,10 +70,9 @@ def silver_color_filt(I):
                         [129, 102, 61]]).T
     i_dist = dim3_dist(I[:, :, :, None], ink_rgb[None, None, :, :])
     return (255 * b_dist/(b_dist+i_dist)).astype(int)
-    
 
-# TODO change default back to "grayscale"
-def open_and_preprocess_pic(picture, imfilt="silver"):
+
+def open_and_preprocess_pic(picture, imfilt="grayscale"):
     if imfilt == "grayscale":
         filt_function = grayscale
     elif imfilt == "silver":
