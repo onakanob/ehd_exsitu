@@ -78,6 +78,7 @@ def safecat(arr1, arr2):
         try:
             return np.concatenate((arr1, arr2))
         except:
+            raise RuntimeError("safecat failed to concatenate inputs.")
             import ipdb; ipdb.set_trace()
 
 
@@ -101,8 +102,13 @@ class EHD_Loader():
                 um_per_px = 1e3 / params['px_per_mm']
                 df = ehd_dir2data(loc, wavefile, um_per_px)
                 df['jetted'] = df['area'] > 0
+                for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
+                                'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
+                    df[colname] = row[colname]
+
                 self.datasets.append(df)
                 self.names.append(os.path.basename(row['Path']))
+
             except Exception as e:
                 print(f"Failed to load {row['Path']}: {e}")
 
@@ -171,28 +177,15 @@ class EHD_Loader():
         else:
             raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
 
-        if ytype in ("area", "obj_count", "jetted"):  # just grab a column
+        # Just grab a column:
+        if ytype in ("area", "print_length", "max_width", "mean_width",
+                     "obj_count", "jetted"):
             ymethod = lambda p: self.dataset_col_to_vec(col=ytype, p=p,
                                                         valid_pairs_only=valid_pairs_only)
-        # elif ytype == "jetted":  # Did anything print at all?
-        #     def jetted(p):
-        #         if valid_pairs_only:
-        #             index = self.pair_indices(p)
-        #             y = np.array(list(self.datasets[p]['area'][index] > 0))
-        #         else:
-        #             y = np.array(list(self.datasets[p]['area'] > 0))
-        #         # return y[:, None]
-        #         return y
-        #     ymethod = jetted
         elif ytype == "jetted_selectors":
             def jetted_select(p):
                 y = self.dataset_col_to_vec(col='jetted', p=p,
                                             valid_pairs_only=valid_pairs_only)
-                # if valid_pairs_only:
-                #     index = self.pair_indices(p)
-                #     y = np.array(list(self.datasets[p]['area'][index] > 0))
-                # else:
-                #     y = np.array(list(self.datasets[p]['area'] > 0))
                 return np.concatenate((y[:, None], ~y[:, None]), axis=1)
             ymethod = jetted_select
         else:
