@@ -10,7 +10,14 @@ import pandas as pd
 from .mle_models import MLE_Regressor, MLE_Classifier
 from .cold_models import (RF_Regressor, MLP_Regressor,
                           RF_Classifier, MLP_Classifier)
-from .utils import first_N_data_split
+from .brute_pretrained_models import (RF_Regressor_Allpre,
+                                      RF_Classifier_Allpre,
+                                      RF_Regressor_lastXY,
+                                      RF_Classifier_lastXY,
+                                      MLP_Regressor_lastXY,
+                                      MLP_Classifier_lastXY)
+
+from .utils import random_N_data_split, dict_mean
 
 
 def make_model_like(architecture, params):
@@ -21,6 +28,13 @@ def make_model_like(architecture, params):
         return RF_Regressor(params)
     if architecture == 'cold_MLP':
         return MLP_Regressor(params)
+    if architecture == 'all_pretrained_RF':
+        return RF_Regressor_Allpre(params)
+    if architecture == 'lastXY_RF':
+        return RF_Regressor_lastXY(params)
+    if architecture == 'lastXY_MLP':
+        return MLP_Regressor_lastXY(params)
+
     # Cold Start Classifiers
     if architecture == 'MLE_class':
         return MLE_Classifier(params)
@@ -28,6 +42,14 @@ def make_model_like(architecture, params):
         return RF_Classifier(params)
     if architecture == 'cold_MLP_class':
         return MLP_Classifier(params)
+    if architecture == 'all_pretrained_RF_class':
+        return RF_Classifier_Allpre(params)
+    if architecture == 'lastXY_RF_class':
+        return RF_Classifier_lastXY(params)
+    if architecture == 'lastXY_MLP_class':
+        return MLP_Classifier_lastXY(params)
+
+
     else:
         raise ValueError(f"Not a valid model architecture: {architecture}")
 
@@ -43,7 +65,7 @@ class EHD_Model:
     def pretrain(self, dataset):
         self.model.pretrain(dataset)
 
-    def evaluate(self, dataset, train_sizes=None, test_size=20):
+    def evaluate(self, dataset, train_sizes=None, test_size=20, samples_to_try=500):
         """Using copies of the model, update it with increasingly large
         training slices of the new dataset. The update function calls
         model.retrain(). Then evaluate the "retrained" model on the next
@@ -56,16 +78,24 @@ class EHD_Model:
 
         results = []
         for train_size in train_sizes:
-            temp_model = self.model.copy()
-            # create train and test sets from the dataset
-            train_set, test_set =  first_N_data_split(dataset, train_size,
-                                                      test_size)
-
-            # retrain self.model on the train set
-            temp_model.retrain(train_set)
-            result = temp_model.evaluate(test_set)
-            result['train_size'] = train_size
-            results.append(result)
+            trials = []
+            # if train_size > 20:
+            #     num_trials = 10  # HACK!
+            # if train_size > 100:
+            #     num_trials = 4
+            # num_trials = np.ceil(samples_to_try / train_size).astype(int)
+            num_trials = np.ceil(7 * np.log(100 / train_size + 1)).astype(int)
+            for _ in range(num_trials):
+                # create train and test sets from the dataset
+                train_set, test_set =  random_N_data_split(dataset, train_size,
+                                                           test_size)
+                # retrain self.model on the train set
+                temp_model = self.model.copy()
+                temp_model.retrain(train_set)
+                result = temp_model.evaluate(test_set)
+                result['train_size'] = train_size
+                trials.append(result)
+            results.append(dict_mean(trials))
 
         return pd.DataFrame.from_dict(results)
 

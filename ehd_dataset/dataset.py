@@ -22,8 +22,8 @@ from matplotlib import pyplot as plt
 from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
-def ehd_dir2data(directory, wavefile, um_per_px):
-    MEAS_PATH = 'logs/measurements.xlsx'
+def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
+    MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
     waves = pd.read_excel(wavefile, index_col=0)
@@ -40,13 +40,11 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     auac = waves.wave.apply(lambda x: np.sum(np.abs(x)))
 
     corrs = []
-    max_offset = 20
     for offset in range(max_offset):
         corr, _, _ = correlate_dfs(dots, 'area', auac, None, offset)
         corrs.append(corr)
     offset = np.argmax(corrs)
     _, Aidx, Bidx = correlate_dfs(dots, 'area', auac, None, offset)
-    print(f'dataset {directory}\toffset {offset}\tcorr {np.max(corrs)}')
 
     dots = dots.loc[Aidx]
 
@@ -64,6 +62,7 @@ def ehd_dir2data(directory, wavefile, um_per_px):
     # print(corr)
     # corr, _ = pearsonr(dots.area, dots.vector.apply(lambda x: np.sqrt(np.sum(x**2))))
     # print(corr)
+    print(f'dataset {directory}\t{len(dots)} points\toffset {offset}\tcorr {np.max(corrs)}')
 
     return dots
 
@@ -79,6 +78,7 @@ def safecat(arr1, arr2):
         try:
             return np.concatenate((arr1, arr2))
         except:
+            raise RuntimeError("safecat failed to concatenate inputs.")
             import ipdb; ipdb.set_trace()
 
 
@@ -100,20 +100,51 @@ class EHD_Loader():
                     params = json.load(f)
                 wavefile = os.path.join(loc, params['wave_file'])
                 um_per_px = 1e3 / params['px_per_mm']
-                self.datasets.append(ehd_dir2data(loc, wavefile, um_per_px))
+                df = ehd_dir2data(loc, wavefile, um_per_px)
+                df['jetted'] = df['area'] > 0
+                for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
+                                'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
+                    df[colname] = row[colname]
+
+                self.datasets.append(df)
                 self.names.append(os.path.basename(row['Path']))
+
             except Exception as e:
                 print(f"Failed to load {row['Path']}: {e}")
 
     def get_datasets(self):
         return self.datasets
 
-    def dataset_col_to_vec(self, col, p):
+    def dataset_col_to_vec(self, col, p, valid_pairs_only=False):
         """Return column 'col' of dataset index 'p' as a flat numpy array"""
+        if valid_pairs_only:
+            index = self.pair_indices(p)
+            return np.array(list(self.datasets[p][col][index]))
         return np.array(list(self.datasets[p][col]))
 
-    def filters_2_mask(self, filters, p):
-        df = self.datasets[p]
+    def pair_indices(self, p):
+        """Return indices in dataset p where a valid point exists at index
+        i-1"""
+        index = self.datasets[p].index
+        valid = [i-1 in index for i in index]
+        return index[valid]
+
+    def last_pair_method(self, col, ytype, p):
+        index = self.pair_indices(p)
+        last_x = np.array(list(self.datasets[p][col][index-1]))
+        last_y = np.array(list(self.datasets[p][ytype][index-1]))
+        if len(last_y.shape) == 1:
+            last_y = last_y[:, None]
+        this_x = np.array(list(self.datasets[p][col][index]))
+        return np.concatenate((last_x, last_y, this_x), axis=1)
+
+    def filters_2_mask(self, filters, p, valid_pairs_only=False):
+        if valid_pairs_only:
+            index = self.pair_indices(p)
+            df = self.datasets[p].loc[index]
+        else:
+            df = self.datasets[p]
+
         mask = np.ones(len(df)).astype(bool)
         for filt in filters:
             mask *= (df[filt[0]].apply(filt[1]) == filt[2]).astype(bool)
@@ -129,40 +160,42 @@ class EHD_Loader():
         # eval dataset is element 'fold' of the filtered idx list
         fold = int(idx[fold])
 
-        # if not type(fold) == int:
-        #     raise TypeError("fold must be an integer")
         if fold >= len(self.names):
             raise ValueError(f"not enough EHD datasets to create fold {fold}")
         fold_name = self.names[fold]
 
-        train_set = {'X': None, 'Y': None, 'p': None}
-        eval_set = train_set.copy()
+        valid_pairs_only = False
 
         if xtype in ("vector", "wave"):  # just grab a column
             xmethod = lambda p: self.dataset_col_to_vec(col=xtype, p=p)
+        elif xtype == "last_wave":  # last wave + y pair, plus x
+            xmethod = lambda p: self.last_pair_method(col='wave', ytype=ytype, p=p)
+            valid_pairs_only = True
+        elif xtype == "last_vector":  # last wave + y pair, plus x
+            xmethod = lambda p: self.last_pair_method(col='vector', ytype=ytype, p=p)
+            valid_pairs_only = True
         else:
             raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
 
-        if ytype in ("area", "obj_count"):  # just grab a column
-            ymethod = lambda p: self.dataset_col_to_vec(col=ytype, p=p)
-        elif ytype == "jetted":  # Did anything print at all?
-            def jetted(p):
-                y = np.array(list(self.datasets[p]['area'] > 0))
-                # return y[:, None]
-                return y
-            ymethod = jetted
+        # Just grab a column:
+        if ytype in ("area", "print_length", "max_width", "mean_width",
+                     "obj_count", "jetted"):
+            ymethod = lambda p: self.dataset_col_to_vec(col=ytype, p=p,
+                                                        valid_pairs_only=valid_pairs_only)
         elif ytype == "jetted_selectors":
             def jetted_select(p):
-                y = np.array(list(self.datasets[p]['area'] > 0))
+                y = self.dataset_col_to_vec(col='jetted', p=p,
+                                            valid_pairs_only=valid_pairs_only)
                 return np.concatenate((y[:, None], ~y[:, None]), axis=1)
             ymethod = jetted_select
         else:
             raise ValueError(f"EHD dataset with ytype {ytype} not implemented")
 
 
-        # for p in range(len(self.names)):
+        train_set = {'X': None, 'Y': None, 'p': None}
+        eval_set = train_set.copy()
         for p in idx:
-            mask = self.filters_2_mask(filters, p)
+            mask = self.filters_2_mask(filters, p, valid_pairs_only=valid_pairs_only)
             # if mask.sum() == 0:
             #     import ipdb; ipdb.set_trace()
 
@@ -173,7 +206,7 @@ class EHD_Loader():
                                         ymethod(p)[mask])
                 eval_set['p'] = safecat(eval_set['p'],
                                         p * np.ones(mask.sum()))
-                                        # p * np.ones(len(self.datasets[p])))
+
             elif pretrain:
                 train_set['X'] = safecat(train_set['X'],
                                          xmethod(p)[mask])
@@ -181,7 +214,6 @@ class EHD_Loader():
                                          ymethod(p)[mask])
                 train_set['p'] = safecat(train_set['p'],
                                          p * np.ones(mask.sum()))
-                                         # p * np.ones(len(self.datasets[p])))
 
         return train_set, eval_set, fold_name
 
