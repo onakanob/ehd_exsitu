@@ -12,10 +12,12 @@ from .cold_models import (RF_Regressor, MLP_Regressor,
                           RF_Classifier, MLP_Classifier)
 from .brute_pretrained_models import (RF_Regressor_Allpre,
                                       RF_Classifier_Allpre,
-                                      RF_Regressor_lastXY,
-                                      RF_Classifier_lastXY,
-                                      MLP_Regressor_lastXY,
-                                      MLP_Classifier_lastXY)
+                                      MLP_Regressor_Allpre,
+                                      MLP_Classifier_Allpre)
+                                      # RF_Regressor_lastXY,
+                                      # RF_Classifier_lastXY,
+                                      # MLP_Regressor_lastXY,
+                                      # MLP_Classifier_lastXY)
 
 from .utils import random_N_data_split, dict_mean
 
@@ -28,12 +30,14 @@ def make_model_like(architecture, params):
         return RF_Regressor(params)
     if architecture == 'cold_MLP':
         return MLP_Regressor(params)
-    if architecture == 'all_pretrained_RF':
+    if architecture == 'only_pretrained_RF':
         return RF_Regressor_Allpre(params)
-    if architecture == 'lastXY_RF':
-        return RF_Regressor_lastXY(params)
-    if architecture == 'lastXY_MLP':
-        return MLP_Regressor_lastXY(params)
+    if architecture == 'only_pretrained_MLP':
+        return MLP_Regressor_Allpre(params)
+    # if architecture == 'lastXY_RF':
+    #     return RF_Regressor_lastXY(params)
+    # if architecture == 'lastXY_MLP':
+    #     return MLP_Regressor_lastXY(params)
 
     # Cold Start Classifiers
     if architecture == 'MLE_class':
@@ -42,12 +46,14 @@ def make_model_like(architecture, params):
         return RF_Classifier(params)
     if architecture == 'cold_MLP_class':
         return MLP_Classifier(params)
-    if architecture == 'all_pretrained_RF_class':
+    if architecture == 'only_pretrained_RF_class':
         return RF_Classifier_Allpre(params)
-    if architecture == 'lastXY_RF_class':
-        return RF_Classifier_lastXY(params)
-    if architecture == 'lastXY_MLP_class':
-        return MLP_Classifier_lastXY(params)
+    if architecture == 'only_pretrained_MLP_class':
+        return MLP_Classifier_Allpre(params)
+    # if architecture == 'lastXY_RF_class':
+    #     return RF_Classifier_lastXY(params)
+    # if architecture == 'lastXY_MLP_class':
+    #     return MLP_Classifier_lastXY(params)
 
 
     else:
@@ -79,11 +85,6 @@ class EHD_Model:
         results = []
         for train_size in train_sizes:
             trials = []
-            # if train_size > 20:
-            #     num_trials = 10  # HACK!
-            # if train_size > 100:
-            #     num_trials = 4
-            # num_trials = np.ceil(samples_to_try / train_size).astype(int)
             num_trials = np.ceil(7 * np.log(100 / train_size + 1)).astype(int)
             for _ in range(num_trials):
                 # create train and test sets from the dataset
@@ -95,6 +96,7 @@ class EHD_Model:
                 result = temp_model.evaluate(test_set)
                 result['train_size'] = train_size
                 trials.append(result)
+
             results.append(dict_mean(trials))
 
         return pd.DataFrame.from_dict(results)

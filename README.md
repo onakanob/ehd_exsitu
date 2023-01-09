@@ -12,3 +12,19 @@ Section is incomplete
  
 # ehd_dataset
 The EHD_Loader object holds multiple training datasets in the loader.datasets array, each a dataframe containing waveforms and measurements from a single experiment. 
+
+# ehd_model
+
+## Regressors:
+### MLE
+### cold_RF
+### cold_MLP
+### only_pretrained_RF
+### only_pretrained_MLP
+
+## Classifiers:
+### MLE_class
+### cold_RF_class
+### cold_MLP_class
+### only_pretrained_RF_class
+### only_pretrained_MLP_class

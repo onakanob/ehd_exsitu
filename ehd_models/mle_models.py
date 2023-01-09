@@ -11,9 +11,9 @@ from .utils import regression_metrics, classification_metrics
 
 class MLE_Regressor():
     pretrainer = True
-    xtype = 'wave'
-    ytype = 'area'
-    filters = []
+    # xtype = 'wave'
+    # ytype = 'area'
+    # filters = []
 
     def __init__(self, params):
         self.params = params
@@ -46,7 +46,7 @@ class MLE_Regressor():
 
 class MLE_Classifier(MLE_Regressor):
     # xtype = 'wave'
-    ytype = 'jetted_selectors'
+    # ytype = 'jetted_selectors'
     # filters = []
 
     def __init__(self, params):
@@ -61,19 +61,28 @@ class MLE_Classifier(MLE_Regressor):
         return mycopy
 
     def update_Y(self):
-        self.Y = np.zeros(self.num_classes)
-        self.Y[np.argmax(self.observations)] = 1
+        self.Y = np.argmax(self.observations)
+        # self.Y = np.zeros(self.num_classes)
+        # self.Y[np.argmax(self.observations)] = 1
 
     def pretrain(self, data):
-        Y = data['Y']
+        Y = idx_to_onehot(data['Y'])
         self.num_classes = Y.shape[1]
         self.observations = Y.sum(0)
         self.update_Y()
 
     def retrain(self, data):
-        Y = data['Y']
+        Y = idx_to_onehot(data['Y'])
         self.observations += Y.sum(0)
         self.update_Y()
 
     def evaluate(self, data):
         return classification_metrics(data['Y'], self.predict(data['X']))
+
+
+def idx_to_onehot(idxs, num_classes=None):
+    if num_classes is None:
+        num_classes = np.max(idxs + 1)
+    b = np.zeros((len(idxs), num_classes))
+    b[np.arange(len(idxs)), idxs.astype(int)] = 1
+    return b

@@ -37,10 +37,10 @@ class RF_Regressor(Cold_SciKit_Model):
     hyperparams = ['n_estimators', 'min_samples_split']  # TODO etc
 
     # Dataset specifiers - will be passed to EHD_Loader.folded_dataset
-    xtype = 'vector'
-    ytype = 'area'
+    # xtype = 'vector'
+    # ytype = 'area'
     # filters = [('vector', lambda x: len(x), 6)]
-    filters = []
+    # filters = []
 
     def __init__(self, params):
         super().__init__(params)
@@ -64,10 +64,10 @@ class RF_Regressor(Cold_SciKit_Model):
 
 
 class MLP_Regressor(Cold_SciKit_Model):
-    xtype = 'vector'
-    ytype = 'area'
+    # xtype = 'vector'
+    # ytype = 'area'
     # filters = [('vector', lambda x: len(x), 6)]
-    filters = []
+    # filters = []
 
     def __init__(self, params):
         super().__init__(params)
@@ -90,10 +90,10 @@ class MLP_Regressor(Cold_SciKit_Model):
 
 
 class RF_Classifier(Cold_SciKit_Model):
-    xtype = 'vector'
-    ytype = 'jetted'
+    # xtype = 'vector'
+    # ytype = 'jetted'
     # filters = [('vector', lambda x: len(x), 6)]
-    filters = []
+    # filters = []
 
     def __init__(self, params):
         super().__init__(params)
@@ -117,10 +117,10 @@ class RF_Classifier(Cold_SciKit_Model):
 
 
 class MLP_Classifier(Cold_SciKit_Model):
-    xtype = 'vector'
-    ytype = 'jetted'
+    # xtype = 'vector'
+    # ytype = 'jetted'
     # filters = [('vector', lambda x: len(x), 6)]
-    filters = []
+    # filters = []
 
     def __init__(self, params):
         super().__init__(params)

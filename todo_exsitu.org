@@ -1,8 +1,10 @@
 * codebase
-** TODO Make image preprocessing steps selectable (patch_tools:43, patches_gui:164)
-** TODO Switch these data filters to _experiment_ level inputs: xtype, ytype, filters
 ** TODO add testing for all model training and eval functions
 
+** DONE Make image preprocessing steps selectable (patch_tools:43, patches_gui:164)
+CLOSED: [2023-01-05 Thu 11:47]
+** DONE Switch these data filters to _experiment_ level inputs: xtype, ytype, filters
+CLOSED: [2023-01-05 Thu 11:48]
 ** DONE finish modifying run script for all-in-one entry point. 
 CLOSED: [2022-12-26 Mon 22:09]
 *** DONE run through it with one dataset, just to be sure.
@@ -15,8 +17,10 @@ CLOSED: [2022-12-16 Fri 21:40]
 CLOSED: [2022-12-24 Sat 16:40]
 
 * dataset
+** TODO Regress only when jetting
+** TODO Square waves abs voltage in dataset
+
 ** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
-** TODO Add synthetic dataset to validate model behaviors (any Markov process + noise) -KJ
 ** DONE for small train sizes, multiple samples from random indices in the run
 CLOSED: [2022-08-09 Tue 23:02]
 ** DONE double check area units and high MAE values
@@ -24,6 +28,7 @@ CLOSED: [2022-08-09 Tue 15:53]
 ** DONE t-1 return type that includes y-spec
 CLOSED: [2022-07-26 Tue 17:23]
 
+** NOTDONE Add synthetic dataset to validate model behaviors (any Markov process + noise) -KJ
 
 * models
 ** TODO Add another baseline - always predict last Y -KJ
