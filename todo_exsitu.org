@@ -17,10 +17,12 @@ CLOSED: [2022-12-16 Fri 21:40]
 CLOSED: [2022-12-24 Sat 16:40]
 
 * dataset
-** TODO Regress only when jetting
 ** TODO Square waves abs voltage in dataset
+** TODO Visualizer for per-point regression in datasets, to spot experimental de-sync
 
 ** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
+** DONE Regress only when jetting
+CLOSED: [2023-01-09 Mon 12:52]
 ** DONE for small train sizes, multiple samples from random indices in the run
 CLOSED: [2022-08-09 Tue 23:02]
 ** DONE double check area units and high MAE values

@@ -106,6 +106,10 @@ class EHD_Loader():
                                 'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
                     df[colname] = row[colname]
 
+                # Enforce only positive square wave voltages:
+                if row.Wavegen == 'square':
+                    df.vector = df.vector.apply(lambda x: np.abs(x))
+
                 self.datasets.append(df)
                 self.names.append(os.path.basename(row['Path']))
 
