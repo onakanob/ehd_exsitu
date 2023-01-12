@@ -24,13 +24,16 @@ from .utils import random_N_data_split, dict_mean
 
 def make_model_like(architecture, params):
     # Cold Start Regressors
-    if architecture == 'MLE':
+    if architecture == 'MLE'\
+       or (architecture == 'normed_MLE'):
         return MLE_Regressor(params)
     if architecture == 'cold_RF':
         return RF_Regressor(params)
     if architecture == 'cold_MLP':
         return MLP_Regressor(params)
-    if architecture == 'only_pretrained_RF':
+    if (architecture == 'only_pretrained_RF')\
+       or (architecture == 'normed_RF')\
+       or (architecture == 'v_normed_RF'):
         return RF_Regressor_Allpre(params)
     if architecture == 'only_pretrained_MLP':
         return MLP_Regressor_Allpre(params)
@@ -40,13 +43,16 @@ def make_model_like(architecture, params):
     #     return MLP_Regressor_lastXY(params)
 
     # Cold Start Classifiers
-    if architecture == 'MLE_class':
+    if architecture == 'MLE_class'\
+       or (architecture == 'normed_MLE_class'):
         return MLE_Classifier(params)
     if architecture == 'cold_RF_class':
         return RF_Classifier(params)
     if architecture == 'cold_MLP_class':
         return MLP_Classifier(params)
-    if architecture == 'only_pretrained_RF_class':
+    if architecture == 'only_pretrained_RF_class'\
+       or (architecture == 'normed_RF_class')\
+       or (architecture == 'v_normed_RF_class'):
         return RF_Classifier_Allpre(params)
     if architecture == 'only_pretrained_MLP_class':
         return MLP_Classifier_Allpre(params)

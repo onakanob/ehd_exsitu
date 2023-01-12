@@ -11,7 +11,23 @@ Section is incomplete
  - sklearn
  
 # ehd_dataset
-The EHD_Loader object holds multiple training datasets in the loader.datasets array, each a dataframe containing waveforms and measurements from a single experiment. 
+The EHD_Loader object holds multiple training datasets in the loader.datasets array, each a dataframe containing waveforms and measurements from a single experiment. When returning a dataset, the "xtype" and "ytype" arguments control how the X and Y variables (input and supervised output, respectively) will be formatted. The following options are available:
+
+## xtype
+ - vector
+ - wave
+ - last_wave
+ - last_vector
+ - normed_squares
+
+## ytype
+ - area
+ - print_length
+ - max_width
+ - mean_width
+ - obj_count
+ - jetted
+ - jetted_selectors
 
 # ehd_model
 

@@ -22,7 +22,8 @@ from matplotlib import pyplot as plt
 from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
-def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
+def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140,
+                 squares=False):
     MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
@@ -32,7 +33,10 @@ def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
     waves['wave'] = waves.wave.apply(cell_to_array)
     waves['wave'] *= waves.volts
     waves['vector'] = waves.vector.apply(cell_to_array)
-    waves['vector'] *= waves.volts
+    if squares:       # Just adjust the first number - second is the pulsewidth
+        waves['vector'] *= waves.volts.apply(lambda v: [v, 1])
+    else:
+        waves['vector'] *= waves.volts
 
     dots = pd.read_excel(os.path.join(directory, MEAS_PATH), index_col=0)
 
@@ -100,7 +104,8 @@ class EHD_Loader():
                     params = json.load(f)
                 wavefile = os.path.join(loc, params['wave_file'])
                 um_per_px = 1e3 / params['px_per_mm']
-                df = ehd_dir2data(loc, wavefile, um_per_px)
+                df = ehd_dir2data(loc, wavefile, um_per_px,
+                                  squares=row.Wavegen == 'square')
                 df['jetted'] = df['area'] > 0
                 for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
                                 'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
@@ -178,6 +183,20 @@ class EHD_Loader():
         elif xtype == "last_vector":  # last wave + y pair, plus x
             xmethod = lambda p: self.last_pair_method(col='vector', ytype=ytype, p=p)
             valid_pairs_only = True
+        elif xtype == "normed_squares":
+            def xmethod(p):
+                vecs = self.dataset_col_to_vec(col="vector", p=p)
+                v_thresh = self.dataset_col_to_vec(col="V Thresh [V] @ .5s",
+                                                   p=p)
+                w_thresh = self.dataset_col_to_vec(col="W thresh [s] @ 1.5 Vt",
+                                                   p=p)
+                return vecs / np.array([v_thresh, w_thresh]).T
+        elif xtype == "v_normed_squares":
+            def xmethod(p):
+                vecs = self.dataset_col_to_vec(col="vector", p=p)
+                v_thresh = self.dataset_col_to_vec(col="V Thresh [V] @ .5s",
+                                                   p=p)
+                return vecs / np.array([v_thresh, np.ones_like(v_thresh)]).T
         else:
             raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
 

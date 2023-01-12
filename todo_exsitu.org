@@ -17,7 +17,13 @@ CLOSED: [2022-12-16 Fri 21:40]
 CLOSED: [2022-12-24 Sat 16:40]
 
 * dataset
-** TODO Square waves abs voltage in dataset
+** DONE Square waves abs voltage in dataset
+CLOSED: [2023-01-10 Tue 12:09]
+** DONE Change ehd_dir2data so that pulsewidth doesn't get multiplied by voltage gain
+CLOSED: [2023-01-10 Tue 12:10]
+** DONE Normalize just the voltage (not the pulsewidth)
+CLOSED: [2023-01-10 Tue 15:12]
+
 ** TODO Visualizer for per-point regression in datasets, to spot experimental de-sync
 
 ** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
@@ -33,7 +39,7 @@ CLOSED: [2022-07-26 Tue 17:23]
 ** NOTDONE Add synthetic dataset to validate model behaviors (any Markov process + noise) -KJ
 
 * models
-** TODO Add another baseline - always predict last Y -KJ
+** DONE Added "normed_rf" model type - just another Allpre random forest, but new label for the normed_squares datatype
 ** TODO Try cold-start linear last-X/Y (and linear models in general) -KJ
 ** convolutional input layer transfer?
 ** latent space inputs and runtime L-estimator
