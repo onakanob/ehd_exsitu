@@ -1,3 +1,14 @@
+* changelog
+** changed scikit pipe from self.model to self.pipe - only 2 levels of self.model nesting overload now.
+** Wrote test script test_ehd_model.py
+** Updated test dataset to reflect new columns
+** Implemented save/load functionality to EHD_Model
+** Cleaned up unused normalized_input_models.py
+** Created hyperparam tuning loop using Ray.tune in model_tuner.py
+** New entry point script tune.py to tune hyperparameters - hyperparam loop seems to basically work!
+** Renamed EHD_Model.model.model to pipe. (It's usually a scikitlearn pipeline in the model wrapper)
+** Listed hyperparameters for RF_Classifier_Allpre - added check to set max_samples=None if bootstrapping is off.
+
 * codebase
 ** TODO add testing for all model training and eval functions
 

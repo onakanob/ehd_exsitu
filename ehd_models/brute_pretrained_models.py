@@ -24,34 +24,29 @@ class Only_Hot_SciKit_Model:
         self.params = params
 
     def pretrain(self, data):
-        self.model.fit(data['X'], data['Y'])
+        self.pipe.fit(data['X'], data['Y'])
 
     def retrain(self, data):
         """A hot model has no retraining behavior."""
         pass
 
     def predict(self, X):
-        return self.model.predict(X)
+        return self.pipe.predict(X)
 
 
 class RF_Regressor_Allpre(Only_Hot_SciKit_Model):
     hyperparams = ['n_estimators', 'min_samples_split']  # TODO etc
 
-    # Dataset specifiers - will be passed to EHD_Loader.folded_dataset
-    # xtype = 'vector'
-    # ytype = 'area'
-    # filters = [('vector', lambda x: len(x), 6)]
-
     def __init__(self, params):
         super().__init__(params)
-        self.model = Pipeline([
+        self.pipe = Pipeline([
             ('whiten', StandardScaler()),
             ('forest', RandomForestRegressor())
         ])
 
     def copy(self):
         mycopy = RF_Regressor_Allpre(self.params.copy())
-        mycopy.model = deepcopy(self.model)
+        mycopy.pipe = deepcopy(self.pipe)
         return mycopy
 
     def tune(self, data):
@@ -68,30 +63,36 @@ class RF_Regressor_Allpre(Only_Hot_SciKit_Model):
 
 #     def copy(self):
 #         mycopy = RF_Regressor_lastXY(self.params.copy())
-#         mycopy.model = deepcopy(self.model)
+#         mycopy.pipe = deepcopy(self.pipe)
 #         return mycopy
 
 
 class RF_Classifier_Allpre(Only_Hot_SciKit_Model):
-    hyperparams = ['n_estimators', 'min_samples_split']  # TODO etc
-    # xtype = 'vector'
-    # ytype = 'jetted'
-    # filters = [('vector', lambda x: len(x), 6)]
+    PARAMS = ('n_estimators', 'max_depth', 'min_samples_split',
+              'min_samples_leaf', 'max_features', 'max_leaf_nodes',
+              'bootstrap', 'max_samples')
 
     def __init__(self, params):
         super().__init__(params)
-        self.model = Pipeline([
+
+        forest_parameters = {}
+        for key in self.PARAMS:
+            value = params.get(key)
+            if value is not None:
+                forest_parameters[key] = value
+        if forest_parameters.get("bootstrap") is not None\
+           and not forest_parameters.get("bootstrap"):
+            forest_parameters["max_samples"] = None
+
+        self.pipe = Pipeline([
             ('whiten', StandardScaler()),
-            ('forest', RandomForestClassifier())
+            ('forest', RandomForestClassifier(**forest_parameters))
         ])
 
     def copy(self):
         mycopy = RF_Classifier_Allpre(self.params.copy())
-        mycopy.model = deepcopy(self.model)
+        mycopy.pipe = deepcopy(self.pipe)
         return mycopy
-
-    def tune(self, data):
-        pass                    # TODO
 
     def evaluate(self, data):
         return classification_metrics(data['Y'], self.predict(data['X']))
@@ -104,7 +105,7 @@ class RF_Classifier_Allpre(Only_Hot_SciKit_Model):
 
 #     def copy(self):
 #         mycopy = RF_Classifier_lastXY(self.params.copy())
-#         mycopy.model = deepcopy(self.model)
+#         mycopy.pipe = deepcopy(self.pipe)
 #         return mycopy
 
 
@@ -112,14 +113,14 @@ class MLP_Regressor_Allpre(RF_Regressor_Allpre):
     def __init__(self, params):
         super().__init__(params)
         # self.xtype = 'last_vector'
-        self.model = Pipeline([
+        self.pipe = Pipeline([
             ('whiten', StandardScaler()),
             ('MLP', MLPRegressor(max_iter=params['max_iter']))
         ])
 
     def copy(self):
         mycopy = MLP_Regressor_lastXY(self.params.copy())
-        mycopy.model = deepcopy(self.model)
+        mycopy.pipe = deepcopy(self.pipe)
         return mycopy
 
 
@@ -127,12 +128,12 @@ class MLP_Classifier_Allpre(RF_Classifier_Allpre):
     def __init__(self, params):
         super().__init__(params)
         # self.xtype = 'last_vector'
-        self.model = Pipeline([
+        self.pipe = Pipeline([
             ('whiten', StandardScaler()),
             ('MLP', MLPClassifier(max_iter=params['max_iter']))
         ])
 
     def copy(self):
         mycopy = MLP_Classifier_lastXY(self.params.copy())
-        mycopy.model = deepcopy(self.model)
+        mycopy.pipe = deepcopy(self.pipe)
         return mycopy

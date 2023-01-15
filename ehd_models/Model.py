@@ -4,6 +4,8 @@ Created on June 15 2022
 
 @author: Oliver Nakano-Baker
 """
+import pickle
+
 import numpy as np
 import pandas as pd
 
@@ -61,9 +63,7 @@ def make_model_like(architecture, params):
     # if architecture == 'lastXY_MLP_class':
     #     return MLP_Classifier_lastXY(params)
 
-
-    else:
-        raise ValueError(f"Not a valid model architecture: {architecture}")
+    raise ValueError(f"Not a valid model architecture: {architecture}")
 
 
 class EHD_Model:
@@ -74,8 +74,15 @@ class EHD_Model:
         self.model = make_model_like(architecture, params)
         self.pretrainer = self.model.pretrainer
 
+    # Some passthrough functions:
+    def predict(self, X):
+        return self.model.predict(X)
+
     def pretrain(self, dataset):
         self.model.pretrain(dataset)
+
+    def retrain(self, dataset):
+        self.model.retrain(dataset)
 
     def evaluate(self, dataset, train_sizes=None, test_size=20, samples_to_try=500):
         """Using copies of the model, update it with increasingly large
@@ -107,14 +114,17 @@ class EHD_Model:
 
         return pd.DataFrame.from_dict(results)
 
-    @property
-    def xtype(self):
-        return self.model.xtype
+    def save(self, path):
+        with open(path, 'wb') as f:
+            pickle.dump((self.architecture,
+                         self.model.params,
+                         self.model.copy()),
+                        f)
 
-    @property
-    def ytype(self):
-        return self.model.ytype
-
-    @property
-    def filters(self):
-        return self.model.filters
+    @staticmethod
+    def load(path):
+        with open(path, 'rb') as f:
+            architecture, params, m = pickle.load(f)
+        model = EHD_Model(architecture, params)
+        model.model = m
+        return model

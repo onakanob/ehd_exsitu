@@ -19,7 +19,8 @@ The EHD_Loader object holds multiple training datasets in the loader.datasets ar
  - last_wave
  - last_vector
  - normed_squares
-
+ - v_normed_squares
+ 
 ## ytype
  - area
  - print_length
@@ -32,15 +33,15 @@ The EHD_Loader object holds multiple training datasets in the loader.datasets ar
 # ehd_model
 
 ## Regressors:
-### MLE
-### cold_RF
-### cold_MLP
-### only_pretrained_RF
-### only_pretrained_MLP
+ - MLE
+ - cold_RF
+ - cold_MLP
+ - only_pretrained_RF
+ - only_pretrained_MLP
 
 ## Classifiers:
-### MLE_class
-### cold_RF_class
-### cold_MLP_class
-### only_pretrained_RF_class
-### only_pretrained_MLP_class
+ - MLE_class
+ - cold_RF_class
+ - cold_MLP_class
+ - only_pretrained_RF_class
+ - only_pretrained_MLP_class

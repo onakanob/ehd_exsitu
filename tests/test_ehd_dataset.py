@@ -17,6 +17,8 @@ sys.path.append('..')
 from ehd_dataset.dataset import EHD_Loader
 
 
+# TODO integrate this with model test - that script has to boot up a loader too
+# anyway.
 def test_import():
     INDEX = './dataset_index.xlsx'
     loader = EHD_Loader(index_file=INDEX)
@@ -34,3 +36,7 @@ def test_import():
     corr, _ = pearsonr(df.area,
                        df.vector.apply(lambda x: np.sqrt(np.sum(x**2))))
     assert corr > 0.7
+
+
+if __name__=="__main__":
+    test_import()
