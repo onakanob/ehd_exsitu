@@ -50,4 +50,7 @@ if __name__=="__main__":
 
     ehd_loader = EHD_Loader(args.index)
     tune_hyperparameters(ARCHITECTURE, XTYPE, YTYPE, FILTERS, PARAMS,
-                         loader=ehd_loader, output_dir=args.output)
+                         trials=10_000,
+                         time_limit=1,
+                         loader=ehd_loader,
+                         output_dir=args.output)

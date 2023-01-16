@@ -4,7 +4,8 @@ Created on June 15 2022
 
 @author: Oliver Nakano-Baker
 """
-import pickle
+# import pickle
+import dill
 
 import numpy as np
 import pandas as pd
@@ -116,15 +117,17 @@ class EHD_Model:
 
     def save(self, path):
         with open(path, 'wb') as f:
-            pickle.dump((self.architecture,
+            dill.dump((self.architecture,
                          self.model.params,
-                         self.model.copy()),
+                         self.model),
+                         # self.model.pickle()),
                         f)
 
     @staticmethod
     def load(path):
         with open(path, 'rb') as f:
-            architecture, params, m = pickle.load(f)
+            architecture, params, pick = dill.load(f)
         model = EHD_Model(architecture, params)
-        model.model = m
+        model.model = pick
+        # model.model.from_pickle(pick)
         return model

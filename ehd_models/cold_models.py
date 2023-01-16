@@ -6,6 +6,8 @@ Created on June 23 2022
 
 @author: Oliver Nakano-Baker
 """
+import pickle
+
 import numpy as np
 from copy import deepcopy
 
@@ -31,6 +33,13 @@ class Cold_SciKit_Model:
 
     def predict(self, X):
         return self.pipe.predict(X)
+
+    def pickle(self):
+        return pickle.dumps(self.pipe)
+
+    def from_pickle(self, pick):
+        self.pipe = pickle.loads(pick)
+
 
 
 class RF_Regressor(Cold_SciKit_Model):

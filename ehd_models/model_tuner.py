@@ -7,12 +7,29 @@ Utility to tune hyperparameters for any model with a .tune() method.
 @author: Oliver Nakano-Baker
 """
 import os
+import time
 
 import numpy as np
+import ray
 from ray import tune
+from ray.tune import Stopper, TuneConfig
+from ray.air.config import RunConfig
 import ray
 
 from . import EHD_Model
+
+
+# class TimeStopper(Stopper):
+#     def __init__(self, time_limit):
+#         # timelimit == minutes to run
+#         self._start = time.time()
+#         self._time_limit = time_limit * 60
+
+#     def __call__(self, trial_id, result):
+#         return False
+
+#     def stop_all(self):
+#         return time.time() - self._start > self._time_limit
 
 
 def train_model(config):
@@ -35,6 +52,9 @@ def train_model(config):
     output = model.evaluate(eval_set, train_sizes=[config['N']])
 
     # TODO save the model to output/model_{i}.pickle
+    outfile = os.path.join(config['output_dir'],
+                           f"model_{config['trial']}.pickle")
+    model.save(outfile)
 
     return {'eval_dataset': eval_name,
             'F1': float(output['F1']),
@@ -44,7 +64,7 @@ def train_model(config):
 
 
 def tune_hyperparameters(architecture, xtype, ytype, filters, params, loader,
-                         trials=3, N=50, output_dir='.'):
+                         trials=3, time_limit=1, N=50, output_dir='.'):
     """
     Evaluate models with different hyperparameters, report results and
     optimal parameters, and save all trained models for later use as an
@@ -66,7 +86,7 @@ def tune_hyperparameters(architecture, xtype, ytype, filters, params, loader,
               'ytype': ytype,
               'filters': filters,
               'N': N,
-              'output_dir': output_dir,
+              'output_dir': os.path.abspath(output_dir),
               'loader': loader,
               'trial': tune.grid_search(range(trials)),
               **params}
@@ -74,7 +94,14 @@ def tune_hyperparameters(architecture, xtype, ytype, filters, params, loader,
     # train function, wrapped for parallelism
     par_train = tune.with_resources(train_model, {"cpu": 1})
 
-    tuner = tune.Tuner(par_train, param_space=config)
+    tuner = tune.Tuner(par_train,
+                       param_space=config,
+                       tune_config=TuneConfig(num_samples=trials,
+                                              max_concurrent_trials=16,
+                                              time_budget_s=time_limit*60),
+                       run_config=RunConfig(verbose=1)
+                       )
+                                            # local_dir=output_dir))
     results = tuner.fit()
 
     if not os.path.isdir(output_dir):

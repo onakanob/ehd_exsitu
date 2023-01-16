@@ -4,6 +4,8 @@ Created on June 15 2022
 
 @author: Oliver Nakano-Baker
 """
+import pickle
+
 import numpy as np
 
 from .utils import regression_metrics, classification_metrics
@@ -78,6 +80,12 @@ class MLE_Classifier(MLE_Regressor):
 
     def evaluate(self, data):
         return classification_metrics(data['Y'], self.predict(data['X']))
+
+    def pickle(self):
+        return pickle.dumps((self.Y, self.observations, self.num_classes))
+
+    def from_pickle(self, pick):
+        self.Y, self.observations, self.num_classes = pickle.loads(pick)
 
 
 def idx_to_onehot(idxs, num_classes=None):

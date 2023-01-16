@@ -7,6 +7,8 @@ Created on July 26 2022
 
 @author: Oliver Nakano-Baker
 """
+import pickle
+
 import numpy as np
 from copy import deepcopy
 
@@ -32,6 +34,12 @@ class Only_Hot_SciKit_Model:
 
     def predict(self, X):
         return self.pipe.predict(X)
+
+    def pickle(self):
+        return pickle.dumps(self.pipe)
+
+    def from_pickle(self, pick):
+        self.pipe = pickle.loads(pick)
 
 
 class RF_Regressor_Allpre(Only_Hot_SciKit_Model):
@@ -96,6 +104,7 @@ class RF_Classifier_Allpre(Only_Hot_SciKit_Model):
 
     def evaluate(self, data):
         return classification_metrics(data['Y'], self.predict(data['X']))
+
 
 
 # class RF_Classifier_lastXY(RF_Classifier_Allpre):

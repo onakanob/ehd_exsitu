@@ -1,17 +1,12 @@
-* changelog
-** changed scikit pipe from self.model to self.pipe - only 2 levels of self.model nesting overload now.
-** Wrote test script test_ehd_model.py
-** Updated test dataset to reflect new columns
-** Implemented save/load functionality to EHD_Model
-** Cleaned up unused normalized_input_models.py
-** Created hyperparam tuning loop using Ray.tune in model_tuner.py
-** New entry point script tune.py to tune hyperparameters - hyperparam loop seems to basically work!
-** Renamed EHD_Model.model.model to pipe. (It's usually a scikitlearn pipeline in the model wrapper)
-** Listed hyperparameters for RF_Classifier_Allpre - added check to set max_samples=None if bootstrapping is off.
-
+* Experiment
+** TODO modify tuner for regression - tune a regression model
+** TODO write ensemble loader (one class, one regress)
+** TODO write point spread generator - take range of values from the datasets
+** TODO finish script to generate recipes
 * codebase
-** TODO add testing for all model training and eval functions
-
+** DONE add testing for all model training and eval functions
+CLOSED: [2023-01-15 Sun 14:41]
+Not technically complete, but a cross section is there and the test function works well.
 ** DONE Make image preprocessing steps selectable (patch_tools:43, patches_gui:164)
 CLOSED: [2023-01-05 Thu 11:47]
 ** DONE Switch these data filters to _experiment_ level inputs: xtype, ytype, filters
@@ -28,16 +23,14 @@ CLOSED: [2022-12-16 Fri 21:40]
 CLOSED: [2022-12-24 Sat 16:40]
 
 * dataset
+** TODO Visualizer for per-point regression in datasets, to spot experimental de-sync
+** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
 ** DONE Square waves abs voltage in dataset
 CLOSED: [2023-01-10 Tue 12:09]
 ** DONE Change ehd_dir2data so that pulsewidth doesn't get multiplied by voltage gain
 CLOSED: [2023-01-10 Tue 12:10]
 ** DONE Normalize just the voltage (not the pulsewidth)
 CLOSED: [2023-01-10 Tue 15:12]
-
-** TODO Visualizer for per-point regression in datasets, to spot experimental de-sync
-
-** TODO Try last X/last Y/delta-X (instead of new-X) to make it easier for the random forest -KJ
 ** DONE Regress only when jetting
 CLOSED: [2023-01-09 Mon 12:52]
 ** DONE for small train sizes, multiple samples from random indices in the run
@@ -46,12 +39,11 @@ CLOSED: [2022-08-09 Tue 23:02]
 CLOSED: [2022-08-09 Tue 15:53]
 ** DONE t-1 return type that includes y-spec
 CLOSED: [2022-07-26 Tue 17:23]
-
 ** NOTDONE Add synthetic dataset to validate model behaviors (any Markov process + noise) -KJ
 
 * models
-** DONE Added "normed_rf" model type - just another Allpre random forest, but new label for the normed_squares datatype
 ** TODO Try cold-start linear last-X/Y (and linear models in general) -KJ
+** DONE Added "normed_rf" model type - just another Allpre random forest, but new label for the normed_squares datatype
 ** convolutional input layer transfer?
 ** latent space inputs and runtime L-estimator
 ** supervise updating L
