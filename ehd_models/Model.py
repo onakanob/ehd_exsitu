@@ -26,39 +26,44 @@ from .utils import random_N_data_split, dict_mean
 
 
 def make_model_like(architecture, params):
-    # Cold Start Regressors
+    model_type = get_model_type(architecture)
+    return model_type(params)
+
+
+def get_model_type(architecture):
+    # Regressors
     if architecture == 'MLE'\
        or (architecture == 'normed_MLE'):
-        return MLE_Regressor(params)
+        return MLE_Regressor
     if architecture == 'cold_RF':
-        return RF_Regressor(params)
+        return RF_Regressor
     if architecture == 'cold_MLP':
-        return MLP_Regressor(params)
+        return MLP_Regressor
     if (architecture == 'only_pretrained_RF')\
        or (architecture == 'normed_RF')\
        or (architecture == 'v_normed_RF'):
-        return RF_Regressor_Allpre(params)
+        return RF_Regressor_Allpre
     if architecture == 'only_pretrained_MLP':
-        return MLP_Regressor_Allpre(params)
+        return MLP_Regressor_Allpre
     # if architecture == 'lastXY_RF':
     #     return RF_Regressor_lastXY(params)
     # if architecture == 'lastXY_MLP':
     #     return MLP_Regressor_lastXY(params)
 
-    # Cold Start Classifiers
+    # Classifiers
     if architecture == 'MLE_class'\
        or (architecture == 'normed_MLE_class'):
-        return MLE_Classifier(params)
+        return MLE_Classifier
     if architecture == 'cold_RF_class':
-        return RF_Classifier(params)
+        return RF_Classifier
     if architecture == 'cold_MLP_class':
-        return MLP_Classifier(params)
+        return MLP_Classifier
     if architecture == 'only_pretrained_RF_class'\
        or (architecture == 'normed_RF_class')\
        or (architecture == 'v_normed_RF_class'):
-        return RF_Classifier_Allpre(params)
+        return RF_Classifier_Allpre
     if architecture == 'only_pretrained_MLP_class':
-        return MLP_Classifier_Allpre(params)
+        return MLP_Classifier_Allpre
     # if architecture == 'lastXY_RF_class':
     #     return RF_Classifier_lastXY(params)
     # if architecture == 'lastXY_MLP_class':
@@ -74,6 +79,13 @@ class EHD_Model:
         self.architecture = architecture
         self.model = make_model_like(architecture, params)
         self.pretrainer = self.model.pretrainer
+
+    @staticmethod
+    def optuna_init(architecture, params, trial):
+        model_type = get_model_type(architecture)
+        model_params = model_type.optuna_suggest(trial)
+        return EHD_Model(architecture,
+                         params={**params, **model_params})
 
     # Some passthrough functions:
     def predict(self, X):

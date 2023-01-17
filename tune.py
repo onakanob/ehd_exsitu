@@ -6,14 +6,14 @@ Tune hyperparameters for any model with a .tune() method.
 
 @author: Oliver Nakano-Baker
 """
+import os
 import argparse
 
 import numpy as np
-from ray import tune
+# from ray import tune
 
 from ehd_dataset import EHD_Loader
 from ehd_models.model_tuner import tune_hyperparameters
-
 
 # Experiment: Define the model type and dataset parameters
 ARCHITECTURE = "v_normed_RF_class"
@@ -27,16 +27,6 @@ FILTERS = [
            ('clogging', lambda x: x, False)
           ]
 
-# Define the hyperparameter search space for this model
-PARAMS = {'n_estimators': tune.lograndint(10, 1000),
-          'max_depth': tune.lograndint(1, 100),
-          'min_samples_split': tune.randint(2, 10),
-          'min_samples_leaf': tune.randint(1, 4),
-          'max_features': tune.randint(1, 3),
-          'max_leaf_nodes': tune.lograndint(2, 100),
-          'bootstrap': tune.choice((False, True)),
-          'max_samples': tune.randint(10, 50)}
-
 
 if __name__=="__main__":
     parser = argparse.ArgumentParser()
@@ -46,11 +36,22 @@ if __name__=="__main__":
     parser.add_argument('--index', type=str,
         default="C:/Dropbox/SPEED/Self Driving EHD/Datasets/dataset_index.xlsx",
                         help='''Path to dataset index excel file.''')
+    parser.add_argument('--minutes', type=int, default=1,
+                        help='''Minutes to run.''')
+    parser.add_argument('--trials', type=int, default=100,
+                        help='''Trials to run.''')
+    parser.add_argument('--parallel', type=int, default=1,
+                        help='''Max concurrent trials to run in parallel.''')
+    parser.add_argument('--fold', type=int, default=0,
+                        help='''Which dataset fold to use.''')
     args = parser.parse_args()
 
     ehd_loader = EHD_Loader(args.index)
-    tune_hyperparameters(ARCHITECTURE, XTYPE, YTYPE, FILTERS, PARAMS,
-                         trials=10_000,
-                         time_limit=1,
+
+    tune_hyperparameters(ARCHITECTURE, XTYPE, YTYPE, FILTERS,
                          loader=ehd_loader,
+                         fold=args.fold,
+                         trials=args.trials,
+                         time_limit=args.minutes,
+                         max_concurrent=args.parallel,
                          output_dir=args.output)

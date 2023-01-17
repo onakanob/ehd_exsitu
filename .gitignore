@@ -137,3 +137,5 @@ figs*
 tests/test_models
 TUNE_OUTPUT
 experiments/
+tune.bat
+tests/patch_test_files/*

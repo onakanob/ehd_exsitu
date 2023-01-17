@@ -80,6 +80,18 @@ class RF_Classifier_Allpre(Only_Hot_SciKit_Model):
               'min_samples_leaf', 'max_features', 'max_leaf_nodes',
               'bootstrap', 'max_samples')
 
+    @staticmethod
+    def optuna_suggest(trial):
+        return {
+            'n_estimators':      trial.suggest_int('n_estimators', 10, 1000),
+            'max_depth':         trial.suggest_int('max_depth', 1, 100),
+            'min_samples_split': trial.suggest_int('min_samples_split', 2, 10),
+            'min_samples_leaf':  trial.suggest_int('min_samples_leaf', 1, 4),
+            'max_leaf_nodes':    trial.suggest_int('max_leaf_nodes', 2, 100),
+            'bootstrap':         trial.suggest_categorical('bootstrap', [True, False]),
+            'max_samples':       trial.suggest_int('max_samples', 10, 50),
+        }
+
     def __init__(self, params):
         super().__init__(params)
 
