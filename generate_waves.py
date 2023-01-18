@@ -40,10 +40,7 @@ if __name__ == "__main__":
     if ver == 1:                # Gen 1 solution
         widths = eval(args.tar)
         v_thresh, w_thresh, nozzle = eval(args.obs)
-        waves = choose_squares_ver1(widths,
-                                    v_thresh=v_thresh,
-                                    w_thresh=w_thresh,
-                                    nozzle=nozzle)
+        waves = choose_squares_ver1(widths, v_thresh=v_thresh)
         waves = [(widths[i], waves[i][0], waves[i][1]) for i in
                  range(len(widths))]
         write_ehd_params_file(waves)

@@ -36,8 +36,14 @@ def train_model(trial, config):
                            f"{eval_name}-model_{trial._trial_id}.pickle")
     model.save(outfile)
 
-    return float(output['F1']) * float(output['AUC'])\
-        * float(output['class 1 precision'])
+    # What to maximize:
+    if 'F1' in output.columns:  # Classification
+        return float(output['F1']) * float(output['AUC'])\
+            * float(output['class 1 precision'])
+    elif 'MSE' in output.columns:  # Regression
+        return -float(output['MSE'])
+    else:
+        raise ValueError('Unrecognized model metrics')
 
 
 def tune_hyperparameters(architecture, xtype, ytype, filters, loader,

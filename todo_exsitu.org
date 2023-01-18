@@ -1,8 +1,3 @@
-* Done
- - Switching from Ray Tune to Optuna - former has shit Windows support, blue screens. Wrapped existing tune methods in optuna functionality. Reworked the experimental script and model_tuner.py.
- - Model.py: Separated make_model_like and get_model_type
- - Added static methods to suggest values for an optuna trial: EHD_Model.optuna_init(); RF_Classifier_Allpre.optuna_suggest(trial)
-
 * Experiment
 ** TODO modify tuner for regression - tune a regression model
 ** TODO write ensemble loader (one class, one regress)

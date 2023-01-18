@@ -35,19 +35,22 @@ def test_models():
 
     architectures = ["only_pretrained_RF_class",
                      "MLE_class",
-                     "cold_RF_class"
+                     "MLE",
+                     "cold_RF_class",
+                     "v_normed_Ridge",
+                     "v_normed_MLP"
                     ]
+    _, eval_set, eval_name =\
+        loader.folded_dataset(fold=0,
+                              xtype=XTYPE,
+                              ytype=YTYPE,
+                              pretrain=True,
+                              filters=FILTERS)
     for a in architectures:
-        # model = make_model_like(a, params={})
         model = EHD_Model(architecture=a,
                           params={})
         # Only one dataset in the test bank, so we just get the eval set back:
-        _, eval_set, eval_name =\
-            loader.folded_dataset(fold=0,
-                                  xtype=XTYPE,
-                                  ytype=YTYPE,
-                                  pretrain=model.pretrainer,
-                                  filters=FILTERS)
+
         model.pretrain(eval_set)
         model.retrain(eval_set)
         output = model.predict(eval_set['X'])

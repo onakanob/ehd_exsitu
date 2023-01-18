@@ -13,14 +13,14 @@ from .utils import regression_metrics, classification_metrics
 
 class MLE_Regressor():
     pretrainer = True
-    # xtype = 'wave'
-    # ytype = 'area'
-    # filters = []
-
     def __init__(self, params):
         self.params = params
         self.Y = 0
         self.observations = 0
+        
+    @staticmethod
+    def optuna_suggest(trial):
+        return {}
 
     def copy(self):
         mycopy = MLE_Regressor(self.params.copy())
@@ -47,10 +47,6 @@ class MLE_Regressor():
 
 
 class MLE_Classifier(MLE_Regressor):
-    # xtype = 'wave'
-    # ytype = 'jetted_selectors'
-    # filters = []
-
     def __init__(self, params):
         super().__init__(params)
         self.num_classes = None
@@ -64,8 +60,6 @@ class MLE_Classifier(MLE_Regressor):
 
     def update_Y(self):
         self.Y = np.argmax(self.observations)
-        # self.Y = np.zeros(self.num_classes)
-        # self.Y[np.argmax(self.observations)] = 1
 
     def pretrain(self, data):
         Y = idx_to_onehot(data['Y'])

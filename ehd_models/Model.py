@@ -16,7 +16,8 @@ from .cold_models import (RF_Regressor, MLP_Regressor,
 from .brute_pretrained_models import (RF_Regressor_Allpre,
                                       RF_Classifier_Allpre,
                                       MLP_Regressor_Allpre,
-                                      MLP_Classifier_Allpre)
+                                      MLP_Classifier_Allpre,
+                                      Ridge_Regressor_Allpre)
                                       # RF_Regressor_lastXY,
                                       # RF_Classifier_lastXY,
                                       # MLP_Regressor_lastXY,
@@ -43,16 +44,16 @@ def get_model_type(architecture):
        or (architecture == 'normed_RF')\
        or (architecture == 'v_normed_RF'):
         return RF_Regressor_Allpre
-    if architecture == 'only_pretrained_MLP':
+    if architecture == 'only_pretrained_MLP'\
+       or (architecture == 'v_normed_MLP'):
         return MLP_Regressor_Allpre
-    # if architecture == 'lastXY_RF':
-    #     return RF_Regressor_lastXY(params)
-    # if architecture == 'lastXY_MLP':
-    #     return MLP_Regressor_lastXY(params)
+    if architecture == 'v_normed_Ridge':
+        return Ridge_Regressor_Allpre
 
     # Classifiers
     if architecture == 'MLE_class'\
-       or (architecture == 'normed_MLE_class'):
+       or (architecture == 'normed_MLE_class')\
+       or (architecture == 'v_normed_MLE_class'):
         return MLE_Classifier
     if architecture == 'cold_RF_class':
         return RF_Classifier
@@ -62,12 +63,9 @@ def get_model_type(architecture):
        or (architecture == 'normed_RF_class')\
        or (architecture == 'v_normed_RF_class'):
         return RF_Classifier_Allpre
-    if architecture == 'only_pretrained_MLP_class':
+    if architecture == 'only_pretrained_MLP_class'\
+       or (architecture == 'v_normed_MLP_class'):
         return MLP_Classifier_Allpre
-    # if architecture == 'lastXY_RF_class':
-    #     return RF_Classifier_lastXY(params)
-    # if architecture == 'lastXY_MLP_class':
-    #     return MLP_Classifier_lastXY(params)
 
     raise ValueError(f"Not a valid model architecture: {architecture}")
 
