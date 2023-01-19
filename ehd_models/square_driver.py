@@ -50,7 +50,11 @@ class EHD_Ensemble():
             raise ValueError('task type must be "classify" or "regress"')
 
 
-def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output=None):
+def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output=None,
+                        classifiers_dir="C:/Dropbox/Python/ehd_exsitu/ensembles/"\
+                            + "230118 Ensemble Classifier", 
+                        regressors_dir="C:/Dropbox/Python/ehd_exsitu/ensembles/"\
+                            + "230118 Ensemble Regressor"):
     """
     Load up ensembles for jetting classification and width regression.
     Generate a large grid of potential control inputs.
@@ -65,11 +69,9 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
     """
     # Load up ensembles
     classifier =\
-        EHD_Ensemble(directory="C:/Dropbox/Python/ehd_exsitu/ensembles/"\
-                     + "230118 Ensemble Classifier", task='classify')
+        EHD_Ensemble(directory=classifiers_dir, task='classify')
     regressor =\
-        EHD_Ensemble(directory="C:/Dropbox/Python/ehd_exsitu/ensembles/"\
-                     + "230118 Ensemble Regressor", task='regress')
+        EHD_Ensemble(directory=regressors_dir, task='regress')
 
     # Generate a large grid of potential control inputs
     length = int(np.sqrt(samples))
@@ -85,7 +87,6 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
     X = np.vstack([V.ravel(), W.ravel()]).T
     jets, jet_var = classifier.predict(X)
     width, w_var = regressor.predict(X)
-    import ipdb; ipdb.set_trace()
 
     Xj = X[jets]
     jet_varj = jet_var[jets]
@@ -94,14 +95,20 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
 
     def cost(w):
         return 1 * (widthj - w)**2 \
-             + 1 * jet_varj \
-             + 0.6 * w_varj \
-             + 0.5 * Xj[:, -1]
+             + 0.5 * jet_varj \
+             + 0.2 * w_varj \
+             + 0.3 * Xj[:, -1]
 
     waves = []
     for w in widths:
         costs = cost(w)
-        waves.append(Xj[np.argmin(costs)] * np.array([v_thresh, w_thresh]))
+        choice = np.argmin(costs)
+        waves.append(
+            np.concatenate([widthj[choice][None],
+                            Xj[choice] * np.array([v_thresh, w_thresh])]
+            )
+        )
+        print(f"tar: {w}  choice: {widthj[choice]}")
 
     # TODO print space visualizer
     if vis_output is not None:
