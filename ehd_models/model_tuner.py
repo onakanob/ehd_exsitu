@@ -82,4 +82,7 @@ def tune_hyperparameters(architecture, xtype, ytype, filters, loader,
                    n_trials=trials,
                    n_jobs=max_concurrent,
                    timeout=time_limit*60)
-    study.trials_dataframe().to_excel(os.path.join(output_dir, "results.xlsx"))
+
+    df = study.trials_dataframe()
+    df.to_excel(os.path.join(output_dir, "results.xlsx"))
+    return df

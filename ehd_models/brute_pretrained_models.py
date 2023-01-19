@@ -169,7 +169,7 @@ class MLP_Model():
     def __init__(self, params):
         self.mlp_params = {
             'early_stopping': True,
-            'max_iter': 3000,
+            'max_iter': 5000,
             'solver': 'adam',
             'learning_rate': 'adaptive',
             'epsilon': 1e-8,

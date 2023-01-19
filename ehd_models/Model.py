@@ -45,9 +45,11 @@ def get_model_type(architecture):
        or (architecture == 'v_normed_RF'):
         return RF_Regressor_Allpre
     if architecture == 'only_pretrained_MLP'\
+       or (architecture == 'normed_MLP')\
        or (architecture == 'v_normed_MLP'):
         return MLP_Regressor_Allpre
-    if architecture == 'v_normed_Ridge':
+    if architecture == 'normed_MLP_Ridge'\
+       or (architecture == 'v_normed_Ridge'):
         return Ridge_Regressor_Allpre
 
     # Classifiers
@@ -64,6 +66,7 @@ def get_model_type(architecture):
        or (architecture == 'v_normed_RF_class'):
         return RF_Classifier_Allpre
     if architecture == 'only_pretrained_MLP_class'\
+       or (architecture == 'normed_MLP_class')\
        or (architecture == 'v_normed_MLP_class'):
         return MLP_Classifier_Allpre
 

@@ -1,8 +1,13 @@
 * Experiment
-** TODO modify tuner for regression - tune a regression model
-** TODO write ensemble loader (one class, one regress)
-** TODO write point spread generator - take range of values from the datasets
-** TODO finish script to generate recipes
+** TODO retrain with weighted sampling based on dataset size
+** DONE modify tuner for regression - tune a regression model
+CLOSED: [2023-01-19 Thu 01:14]
+** DONE write ensemble loader (one class, one regress)
+CLOSED: [2023-01-19 Thu 01:14]
+** DONE write point spread generator - take range of values from the datasets
+CLOSED: [2023-01-19 Thu 01:14]
+** DONE finish script to generate recipes
+CLOSED: [2023-01-19 Thu 01:14]
 * codebase
 ** DONE add testing for all model training and eval functions
 CLOSED: [2023-01-15 Sun 14:41]

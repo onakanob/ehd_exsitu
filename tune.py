@@ -16,15 +16,16 @@ from ehd_dataset import EHD_Loader
 from ehd_models.model_tuner import tune_hyperparameters
 
 # Experiment: Define the model type and dataset parameters
-ARCHITECTURE = "v_normed_MLP"  # v_normed_X_class, v_normed_RF
-XTYPE = "v_normed_squares"       # vector, normed_squares, v_normed_squares
-YTYPE = "max_width"              # jetted, max_width
-FILTERS = [                     # Std tip square waves with threshold measured
+ARCHITECTURE = "normed_RF"     # normed_MLP_class
+XTYPE = "normed_squares"     # vector, normed_squares, v_normed_squares
+YTYPE = "max_width"          # jetted, max_width
+FILTERS = [                  # Std tip square waves with threshold measured
            ('vector', lambda x: len(x), 2),
            ('Wavegen', lambda x: x, 'square'),
            ('V Thresh [V] @ .5s', np.isnan, False),
            ('SIJ Tip', lambda x: x, 'Std'),
-           ('clogging', lambda x: x, False)
+           ('clogging', lambda x: x, False),
+           ('jetted',  lambda x: x, True),  # For regression only
           ]
 
 
@@ -49,13 +50,31 @@ if __name__=="__main__":
 
     ehd_loader = EHD_Loader(args.index)
 
+    summaries = []
     for fold in range(ehd_loader.num_folds(FILTERS)):
         output_dir = os.path.join(args.output,
                                   f'fold_{fold}')
-        tune_hyperparameters(ARCHITECTURE, XTYPE, YTYPE, FILTERS,
-                             loader=ehd_loader,
-                             fold=fold,
-                             trials=args.trials,
-                             time_limit=args.minutes,
-                             max_concurrent=args.parallel,
-                             output_dir=output_dir)
+        summary = tune_hyperparameters(ARCHITECTURE, XTYPE, YTYPE, FILTERS,
+                                       loader=ehd_loader,
+                                       fold=fold,
+                                       trials=args.trials,
+                                       time_limit=args.minutes,
+                                       max_concurrent=args.parallel,
+                                       output_dir=output_dir)
+        summaries.append(summary)
+
+    # Print summary
+    cols = summaries[0].columns
+    best_idx = [s['value'].argmax() for s in summaries]
+    if 'user_attrs_eval_dataset' in cols:
+        print('dataset:')
+        print([s['user_attrs_eval_dataset'].loc[best_idx[i]] for i, s in enumerate(summaries)])
+    if 'value' in cols:
+        print('values:')
+        print([s['value'].loc[best_idx[i]] for i, s in enumerate(summaries)])
+    if 'user_attrs_MSE' in cols:
+        print('MSEs:')
+        print([s['user_attrs_MSE'].loc[best_idx[i]] for i, s in enumerate(summaries)])
+    if 'user_attrs_r' in cols:
+        print('r:')
+        print([s['user_attrs_r'].loc[best_idx[i]] for i, s in enumerate(summaries)])
