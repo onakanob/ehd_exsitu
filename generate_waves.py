@@ -24,7 +24,10 @@ def ehd_wave_to_string(volts, frequency, velocity, top_string=False):
     bump_hold[s]  spiral_pitch  spit1_time  spit1_volts  spit2_time
     spit2_volts  up_distance  down_distance  dispanse_hold_time
     """
-    STANDARD_END = "\t100.000\t0.000\t0.000\t0.000\t0.000\t0.000\t0.000\t0.000\t0\t0.000\t0\t0.000\t0.000\t0.000\n"
+    bump_hold = 0
+    if frequency > 0:
+        bump_hold = 1/frequency
+    STANDARD_END = f"\t100.000\t0.000\t0.000\t0.000\t0.000\t{bump_hold}\t0.000\t0.000\t0\t0.000\t0\t0.000\t0.000\t0.000\n"
     if top_string:
         operation = "1\t0.0\t0\t0\t1.000"
     else:
@@ -32,15 +35,13 @@ def ehd_wave_to_string(volts, frequency, velocity, top_string=False):
     return operation + STANDARD_END
     
     
-def write_ehd_params_file(waves, directory):
+def write_ehd_params_file(waves, directory, spacing=1):
     """widths, volts, ms"""
     operations = [ehd_wave_to_string(0, 0, 0, top_string=True)]
     for microns, volts, seconds in waves:
-        OVERLAP = 0.5
-        DUTY = 4                           # 1/X duty cycle
-        # TODO: do we need to enforce int-valued frequency here?
-        frequency = 1 / (DUTY * seconds)  # Hz
-        velocity = 1e-3 * microns * OVERLAP * frequency  # [mm/s]
+        DUTY = 4                                        # 1/X duty cycle
+        frequency = 1 / (DUTY * seconds)                # Hz
+        velocity = 1e-3 * microns * spacing * frequency  # [mm/s]
 
         operations.append(ehd_wave_to_string(volts, frequency, velocity))
 
@@ -48,7 +49,6 @@ def write_ehd_params_file(waves, directory):
     with open(params_file, 'w') as f:
         for line in operations:
             f.write(line)
-
 
 
 if __name__ == "__main__":
