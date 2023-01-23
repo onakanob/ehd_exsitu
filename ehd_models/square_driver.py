@@ -94,24 +94,12 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
     w_varj = w_var[jets]
 
     def cost(w):
-        return 1 * (widthj - w)**2 \
+        return 2 * (widthj - w)**2 \
              + 0.5 * jet_varj \
-             + 0.2 * w_varj \
+             + 0.05 * w_varj \
              + 0.3 * Xj[:, -1]
 
-    waves = []
-    for w in widths:
-        costs = cost(w)
-        choice = np.argmin(costs)
-        waves.append(
-            np.concatenate([widthj[choice][None],
-                            Xj[choice] * np.array([v_thresh, w_thresh])]
-            )
-        )
-        print(f"tar: {w}  choice: {widthj[choice]}")
-
-    # TODO print space visualizer
-    if vis_output is not None:
+    def vis_target_width(w):
         df = pd.DataFrame({"V/Vt": X[:, 0],
                           "w/wt": X[:, 1],
                           "jets": jets,
@@ -139,6 +127,21 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
         plt.title("Estimates of prediction variability")
         plt.show()
         plt.clf()
+
+    waves = []
+    for w in widths:
+        costs = cost(w)
+        choice = np.argmin(costs)
+        waves.append(
+            np.concatenate([widthj[choice][None],
+                            Xj[choice] * np.array([v_thresh, w_thresh])]
+            )
+        )
+        print(f"tar: {w}  choice: {widthj[choice]}")
+
+        if vis_output is not None:
+            vis_target_width(w)
+
     return waves
 
 
