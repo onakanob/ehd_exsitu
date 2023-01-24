@@ -99,48 +99,92 @@ def choose_squares_ver2(widths, v_thresh, w_thresh=1, samples=10_000, vis_output
              + 0.05 * w_varj \
              + 0.3 * Xj[:, -1]
 
-    def vis_target_width(w):
-        df = pd.DataFrame({"V/Vt": X[:, 0],
-                          "w/wt": X[:, 1],
-                          "jets": jets,
-                          "jet_var": jet_var,
-                          "width": w,
-                          "w_var": w_var,})
-        df['width'].iloc[df['width'] < 0] = 0
+    def vis_classification(waves):
+        waves = np.array([w[1:] / np.array([v_thresh, w_thresh]) for w in waves])
+        fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+        df = pd.DataFrame({
+            "V/Vt": X[:, 0],
+            "w/wt": X[:, 1],
+            "jets": jets,
+            "jet_var": jet_var,
+            "width": width,
+            "w_var": w_var,
+        })
+        # df['width'].iloc[df['width'] < 0] = 0
         sns.set_theme(style="whitegrid")
-        g = sns.relplot(
+        g = sns.scatterplot(
             data=df,
             x="V/Vt", y="w/wt",
-            hue="jets", size="width",
-            sizes=(10, 200),
+            hue="jets",
+            ax=axs[0]
         )
-        plt.title("Predicted Feature Widths")
-        plt.show()
+        axs[0].plot(waves[:, 0], waves[:, 1], '*', color='red')
+        plt.title("Does it jet?")
+
+        g = sns.scatterplot(
+            data=df,
+            x="V/Vt", y="w/wt",
+            hue="jet_var",
+            # size=2,
+            ax=axs[1]
+        )
+        axs[1].plot(waves[:, 0], waves[:, 1], '*', color='red')
+        plt.title("Ensemble Classification Confidence")
+        plt.savefig(os.path.join(vis_output, "jetting predictions.png"),
+                    dpi=300)
         plt.clf()
 
-        g = sns.relplot(
+    def vis_width_regression(wave):
+        fig, axs = plt.subplots(1, 2, figsize=(12, 5))
+        w = wave[0]
+        wave = wave[1:] / np.array([v_thresh, w_thresh])
+        df = pd.DataFrame({
+            "V/Vt": X[:, 0],
+            "w/wt": X[:, 1],
+            "jets": jets,
+            "jet_var": jet_var,
+            "width": width,
+            "w_var": w_var,
+        })
+        df['size_error'] = np.abs(df['width'] - w)
+        sns.set_theme(style="whitegrid")
+        sns.scatterplot(
             data=df,
             x="V/Vt", y="w/wt",
-            hue="jet_var", size="w_var",
-            sizes=(10, 200),
+            hue="size_error",
+            ax=axs[0],
+            palette='ocean'
         )
-        plt.title("Estimates of prediction variability")
-        plt.show()
-        plt.clf()
+        axs[0].plot(wave[0], wave[1], '*', color='red')
+        plt.title(f'Target Size: {np.round(w, 2)}um')
+
+        sns.scatterplot(
+            data=df,
+            x="V/Vt", y="w/wt",
+            hue="w_var",
+            ax=axs[1],
+            palette='YlOrBr'
+        )
+        axs[1].plot(wave[0], wave[1], '*', color='red')
+        plt.title('Ensemble Regression Variation')
+        plt.savefig(os.path.join(vis_output, f"width {w} choice.png"),
+                    dpi=300)
 
     waves = []
     for w in widths:
         costs = cost(w)
         choice = np.argmin(costs)
-        waves.append(
-            np.concatenate([widthj[choice][None],
-                            Xj[choice] * np.array([v_thresh, w_thresh])]
-            )
-        )
+        wave = np.concatenate([
+            widthj[choice][None],
+            Xj[choice] * np.array([v_thresh, w_thresh])
+        ])
+        waves.append(wave)
         print(f"tar: {w}  choice: {widthj[choice]}")
 
         if vis_output is not None:
-            vis_target_width(w)
+            vis_width_regression(wave)
+    if vis_output is not None:
+        vis_classification(waves)
 
     return waves
 

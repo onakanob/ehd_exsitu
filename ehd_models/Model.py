@@ -18,10 +18,10 @@ from .brute_pretrained_models import (RF_Regressor_Allpre,
                                       MLP_Regressor_Allpre,
                                       MLP_Classifier_Allpre,
                                       Ridge_Regressor_Allpre)
-                                      # RF_Regressor_lastXY,
-                                      # RF_Classifier_lastXY,
-                                      # MLP_Regressor_lastXY,
-                                      # MLP_Classifier_lastXY)
+from .warm_start_models import (MLP_Regressor_Warmstart,
+                                RF_Regressor_Warmstart,
+                                RF_Regressor_Reweight,
+                                MLP_Regressor_Scaling)
 
 from .utils import random_N_data_split, dict_mean
 
@@ -48,9 +48,19 @@ def get_model_type(architecture):
        or (architecture == 'normed_MLP')\
        or (architecture == 'v_normed_MLP'):
         return MLP_Regressor_Allpre
-    if architecture == 'normed_MLP_Ridge'\
+    if architecture == 'normed_Ridge'\
        or (architecture == 'v_normed_Ridge'):
         return Ridge_Regressor_Allpre
+    if (architecture == "warm_MLP"):
+        return MLP_Regressor_Warmstart
+    if (architecture == "warm_RF"):
+        return RF_Regressor_Warmstart
+    if (architecture == "reweight_RF")\
+       or (architecture == 'reweight_RF_wide')\
+       or (architecture == 'reweight_RF_tall'):
+        return RF_Regressor_Reweight
+    if architecture == "scaling_MLP":
+        return MLP_Regressor_Scaling
 
     # Classifiers
     if architecture == 'MLE_class'\
@@ -74,7 +84,7 @@ def get_model_type(architecture):
 
 
 class EHD_Model:
-    log_slices = np.array([1, 2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000,
+    log_slices = np.array([2, 5, 10, 20, 50, 100, 200, 500, 1000, 2000,
                            5000, 10_000])
     def __init__(self, architecture, params={}):
         self.architecture = architecture

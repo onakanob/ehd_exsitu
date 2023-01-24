@@ -28,18 +28,23 @@ FILTERS = [
            ('clogging', lambda x: x, False)
           ]
 
+
 def test_models():
     INDEX = './dataset_index.xlsx'
     SAVE_TO = './test_models/'
     loader = EHD_Loader(index_file=INDEX)
 
-    architectures = ["only_pretrained_RF_class",
-                     "MLE_class",
-                     "MLE",
-                     "cold_RF_class",
-                     "v_normed_Ridge",
-                     "v_normed_MLP"
-                    ]
+    architectures = [
+        "reweight_RF",
+        "only_pretrained_RF_class",
+        "MLE_class",
+        "MLE",
+        "cold_RF_class",
+        "v_normed_Ridge",
+        "v_normed_MLP",
+        "warm_MLP",
+        "warm_RF",
+    ]
     _, eval_set, eval_name =\
         loader.folded_dataset(fold=0,
                               xtype=XTYPE,

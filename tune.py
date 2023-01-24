@@ -16,16 +16,16 @@ from ehd_dataset import EHD_Loader
 from ehd_models.model_tuner import tune_hyperparameters
 
 # Experiment: Define the model type and dataset parameters
-ARCHITECTURE = "normed_RF_class"     # normed_MLP_class
+ARCHITECTURE = "scaling_MLP"     # normed_MLP_class
 XTYPE = "normed_squares"     # vector, normed_squares, v_normed_squares
-YTYPE = "jetted"          # jetted, max_width
+YTYPE = "max_width"          # jetted, max_width
 FILTERS = [                  # Std tip square waves with threshold measured
            ('vector', lambda x: len(x), 2),
-           ('Wavegen', lambda x: x, 'square'),
+           ('Wavegen', lambda x: x, 'square'),  # harmonics, square
            ('V Thresh [V] @ .5s', np.isnan, False),
            ('SIJ Tip', lambda x: x, 'Std'),
            ('clogging', lambda x: x, False),
-           # ('jetted',  lambda x: x, True),  # For regression only
+           ('jetted',  lambda x: x, True),  # For regression only
           ]
 
 

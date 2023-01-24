@@ -90,7 +90,7 @@ if __name__ == "__main__":
              range(len(widths))]
     if ver == 2:
         waves = choose_squares_ver2(widths, v_thresh=args.vt, w_thresh=args.wt,
-                                    vis_output='vis_squares.png',
+                                    vis_output='.\\visuals',
                                     classifiers_dir=args.classifiers,
                                     regressors_dir=args.regressors)
     else:
