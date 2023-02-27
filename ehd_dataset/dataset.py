@@ -11,6 +11,7 @@ Created on June 11 2022
 
 import os
 import json
+import pickle
 import warnings
 from pathlib import Path
 
@@ -86,40 +87,67 @@ def safecat(arr1, arr2):
             import ipdb; ipdb.set_trace()
 
 
+def compile_ehd_dataset(index_file, dataset_pkl, dataset_excel):
+    index_dir = str(Path(index_file).parent)
+    index = pd.read_excel(index_file)
+    names = []
+    datasets = []
+
+    for i, row in index.iterrows():
+        try:
+            loc = os.path.join(index_dir, row['Path'])
+            with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
+                params = json.load(f)
+            wavefile = os.path.join(loc, params['wave_file'])
+            um_per_px = 1e3 / params['px_per_mm']
+            df = ehd_dir2data(  # This prints a summary
+                loc, wavefile, um_per_px, squares=row.Wavegen == 'square')
+            df['jetted'] = df['area'] > 0
+            for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
+                            'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
+                df[colname] = row[colname]
+
+            # Enforce only positive square wave voltages:
+            if row.Wavegen == 'square':
+                df.vector = df.vector.apply(lambda x: np.abs(x))
+
+            datasets.append(df)
+            names.append(os.path.basename(row['Path']))
+
+        except Exception as e:
+            print(f"Failed to load {row['Path']}: {e}")
+
+    # Dump dataset to pickle and excel files
+    master = None
+    for i, name in enumerate(names):
+        d = datasets[i]
+        d['dataset_name'] = name
+        if master is None:
+            master = d
+        else:
+            master = pd.concat((master, d), ignore_index=True)
+
+    master.to_excel(dataset_excel)
+    with open(dataset_pkl, 'wb') as f:
+        pickle.dump(master, f)
+
+    print(f'Compiled dataset in {dataset_pkl} and {dataset_excel}')
+
+
 class EHD_Loader():
     """Class for loading multiple waveform-print metric pairs by referencing an
     index file. For each dataset, match up image analysis and waveform indices,
     pre-process fields to be numerical numpy arrays, and provide dataframes on
     demand."""
-    def __init__(self, index_file):
-        index_dir = str(Path(index_file).parent)
-        index = pd.read_excel(index_file)
+    def __init__(self, dataset_pkl):
+        with open(dataset_pkl, 'rb') as f:
+            df = pickle.load(f)
         self.names = []
         self.datasets = []
 
-        for i, row in index.iterrows():
-            try:
-                loc = os.path.join(index_dir, row['Path'])
-                with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
-                    params = json.load(f)
-                wavefile = os.path.join(loc, params['wave_file'])
-                um_per_px = 1e3 / params['px_per_mm']
-                df = ehd_dir2data(loc, wavefile, um_per_px,
-                                  squares=row.Wavegen == 'square')
-                df['jetted'] = df['area'] > 0
-                for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
-                                'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
-                    df[colname] = row[colname]
-
-                # Enforce only positive square wave voltages:
-                if row.Wavegen == 'square':
-                    df.vector = df.vector.apply(lambda x: np.abs(x))
-
-                self.datasets.append(df)
-                self.names.append(os.path.basename(row['Path']))
-
-            except Exception as e:
-                print(f"Failed to load {row['Path']}: {e}")
+        for name in df.dataset_name.unique():
+            self.names.append(name)
+            self.datasets.append(df[df.dataset_name == name])
 
     def get_datasets(self):
         return self.datasets

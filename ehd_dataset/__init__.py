@@ -4,4 +4,4 @@ Created on June 11 2022
 
 @author: Oliver Nakano-Baker
 """
-from .dataset import EHD_Loader
+from .dataset import EHD_Loader, compile_ehd_dataset
