@@ -55,8 +55,11 @@ def dict_mean(dictionaries):
     array."""
     agg = {}
     for key in dictionaries[0]:
-        vals = np.array([d[key] for d in dictionaries])
-        agg[key] =  np.nanmean(vals[vals != None])
+        vals = np.array([d[key] for d in dictionaries]).astype(float)
+        if not all(np.isnan(vals)):
+            agg[key] =  np.nanmean(vals[vals != None])
+        else:
+            agg[key] = None
     return agg
 
 

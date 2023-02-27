@@ -11,6 +11,7 @@ Created on June 11 2022
 
 import os
 import json
+import pickle
 import warnings
 from pathlib import Path
 
@@ -22,7 +23,8 @@ from matplotlib import pyplot as plt
 from .utils import cell_to_array, parse_volt_strings, correlate_dfs
 
 
-def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
+def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140,
+                 squares=False):
     MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
@@ -32,7 +34,10 @@ def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140):
     waves['wave'] = waves.wave.apply(cell_to_array)
     waves['wave'] *= waves.volts
     waves['vector'] = waves.vector.apply(cell_to_array)
-    waves['vector'] *= waves.volts
+    if squares:       # Just adjust the first number - second is the pulsewidth
+        waves['vector'] *= waves.volts.apply(lambda v: [v, 1])
+    else:
+        waves['vector'] *= waves.volts
 
     dots = pd.read_excel(os.path.join(directory, MEAS_PATH), index_col=0)
 
@@ -82,35 +87,67 @@ def safecat(arr1, arr2):
             import ipdb; ipdb.set_trace()
 
 
+def compile_ehd_dataset(index_file, dataset_pkl, dataset_excel):
+    index_dir = str(Path(index_file).parent)
+    index = pd.read_excel(index_file)
+    names = []
+    datasets = []
+
+    for i, row in index.iterrows():
+        try:
+            loc = os.path.join(index_dir, row['Path'])
+            with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
+                params = json.load(f)
+            wavefile = os.path.join(loc, params['wave_file'])
+            um_per_px = 1e3 / params['px_per_mm']
+            df = ehd_dir2data(  # This prints a summary
+                loc, wavefile, um_per_px, squares=row.Wavegen == 'square')
+            df['jetted'] = df['area'] > 0
+            for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
+                            'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
+                df[colname] = row[colname]
+
+            # Enforce only positive square wave voltages:
+            if row.Wavegen == 'square':
+                df.vector = df.vector.apply(lambda x: np.abs(x))
+
+            datasets.append(df)
+            names.append(os.path.basename(row['Path']))
+
+        except Exception as e:
+            print(f"Failed to load {row['Path']}: {e}")
+
+    # Dump dataset to pickle and excel files
+    master = None
+    for i, name in enumerate(names):
+        d = datasets[i]
+        d['dataset_name'] = name
+        if master is None:
+            master = d
+        else:
+            master = pd.concat((master, d), ignore_index=True)
+
+    master.to_excel(dataset_excel)
+    with open(dataset_pkl, 'wb') as f:
+        pickle.dump(master, f)
+
+    print(f'Compiled dataset in {dataset_pkl} and {dataset_excel}')
+
+
 class EHD_Loader():
     """Class for loading multiple waveform-print metric pairs by referencing an
     index file. For each dataset, match up image analysis and waveform indices,
     pre-process fields to be numerical numpy arrays, and provide dataframes on
     demand."""
-    def __init__(self, index_file):
-        index_dir = str(Path(index_file).parent)
-        index = pd.read_excel(index_file)
+    def __init__(self, dataset_pkl):
+        with open(dataset_pkl, 'rb') as f:
+            df = pickle.load(f)
         self.names = []
         self.datasets = []
 
-        for i, row in index.iterrows():
-            try:
-                loc = os.path.join(index_dir, row['Path'])
-                with open(os.path.join(loc, 'pattern_params.json'), 'r') as f:
-                    params = json.load(f)
-                wavefile = os.path.join(loc, params['wave_file'])
-                um_per_px = 1e3 / params['px_per_mm']
-                df = ehd_dir2data(loc, wavefile, um_per_px)
-                df['jetted'] = df['area'] > 0
-                for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
-                                'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):
-                    df[colname] = row[colname]
-
-                self.datasets.append(df)
-                self.names.append(os.path.basename(row['Path']))
-
-            except Exception as e:
-                print(f"Failed to load {row['Path']}: {e}")
+        for name in df.dataset_name.unique():
+            self.names.append(name)
+            self.datasets.append(df[df.dataset_name == name])
 
     def get_datasets(self):
         return self.datasets
@@ -174,6 +211,20 @@ class EHD_Loader():
         elif xtype == "last_vector":  # last wave + y pair, plus x
             xmethod = lambda p: self.last_pair_method(col='vector', ytype=ytype, p=p)
             valid_pairs_only = True
+        elif xtype == "normed_squares":
+            def xmethod(p):
+                vecs = self.dataset_col_to_vec(col="vector", p=p)
+                v_thresh = self.dataset_col_to_vec(col="V Thresh [V] @ .5s",
+                                                   p=p)
+                w_thresh = self.dataset_col_to_vec(col="W thresh [s] @ 1.5 Vt",
+                                                   p=p)
+                return vecs / np.array([v_thresh, w_thresh]).T
+        elif xtype == "v_normed_squares":
+            def xmethod(p):
+                vecs = self.dataset_col_to_vec(col="vector", p=p)
+                v_thresh = self.dataset_col_to_vec(col="V Thresh [V] @ .5s",
+                                                   p=p)
+                return vecs / np.array([v_thresh, np.ones_like(v_thresh)]).T
         else:
             raise ValueError(f"EHD dataset with xtype {xtype} not implemented")
 
