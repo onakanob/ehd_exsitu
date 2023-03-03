@@ -28,6 +28,9 @@ def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140,
     MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
+    # if "27-Feb-23_sf-sin-line-20um results.xlsx" in wavefile:
+    #     import ipdb; ipdb.set_trace()
+
     waves = pd.read_excel(wavefile, index_col=0)
     waves['volts'] = waves.note.apply(parse_volt_strings)
     waves['volts'] *= VOLT_GAIN
@@ -100,8 +103,9 @@ def compile_ehd_dataset(index_file, dataset_pkl, dataset_excel):
                 params = json.load(f)
             wavefile = os.path.join(loc, params['wave_file'])
             um_per_px = 1e3 / params['px_per_mm']
+            squares = row.Wavegen in ['square', 'sin_line']
             df = ehd_dir2data(  # This prints a summary
-                loc, wavefile, um_per_px, squares=row.Wavegen == 'square')
+                loc, wavefile, um_per_px, squares=squares)
             df['jetted'] = df['area'] > 0
             for colname in ('SIJ Tip', 'Standoff [um]', 'Wavegen',
                             'V Thresh [V] @ .5s', 'W thresh [s] @ 1.5 Vt'):

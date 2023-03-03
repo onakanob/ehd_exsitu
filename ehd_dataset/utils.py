@@ -21,7 +21,7 @@ def correlate_dfs(A, A_key, B, B_key, offset):
 
 
 def cell_to_array(string):
-    split_string = string[1:-1].split()
+    split_string = string[1:-1].replace(",", "").split()
     return np.array(split_string).astype(float)
 
 
