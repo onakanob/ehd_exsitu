@@ -16,12 +16,34 @@ import optuna
 from . import EHD_Model
 
 
-def train_model(trial, config):
+def dict_cat(dicts):
+    """Concatenate each value in an iterable of dictionaries."""
+    keys = np.unique([k for d in dicts for k in d.keys()])
+    catted = None
+    for d in dicts:
+        if catted is None:
+            catted = d
+        else:
+            for k in keys:
+                catted[k] = np.concatenate([catted[k], d[k]])
+    return catted
+
+
+def train_model(trial, config, validation_count=2):
     """Instate, train, and evaluate a model based on values in the config
     dictionary. Assume we receive a dataset loader object in the
     config['loader']"""
-    pretrain_set, eval_set, eval_name = config['dataset']
-    trial.set_user_attr('eval_dataset', eval_name)
+    # pretrain_set, eval_set, eval_name = config['dataset']
+    datasets = config['datasets']
+    names = config['dataset_names']
+    arange = np.arange(len(names))
+    eval_idx = np.sort(np.random.choice(arange,
+                                        size=validation_count,
+                                        replace=False))
+    eval_set = dict_cat(datasets[eval_idx])
+    pretrain_set = dict_cat(datasets[[n not in eval_idx for n in arange]])
+    
+    trial.set_user_attr('eval_datasets', str(names[eval_idx]))
 
     model = EHD_Model.optuna_init(architecture=config['architecture'],
                                   params=config,
@@ -33,7 +55,7 @@ def train_model(trial, config):
         trial.set_user_attr(key, float(value))
 
     outfile = os.path.join(config['output_dir'],
-                           f"{eval_name}-model_{trial._trial_id}.pickle")
+                           f"model_{trial._trial_id}.pickle")
     model.save(outfile)
 
     # What to maximize:
@@ -47,7 +69,7 @@ def train_model(trial, config):
 
 
 def tune_hyperparameters(architecture, xtype, ytype, filters, loader,
-                         fold=0, trials=3, time_limit=1, output_dir='.',
+                         trials=3, time_limit=1, output_dir='.',
                          max_concurrent=1, N=50):
     """
     Evaluate models with different hyperparameters, report results and
@@ -66,14 +88,25 @@ def tune_hyperparameters(architecture, xtype, ytype, filters, loader,
     if not os.path.isdir(output_dir):
         os.mkdir(output_dir)
 
+    # Assemble a list of datasets
+    datasets = []
+    names = []
+    for fold in range(loader.num_folds(filters)):  # Ugly as sin:
+        _, dataset, name = loader.folded_dataset(
+            fold=fold,
+            xtype=xtype,
+            ytype=ytype,
+            pretrain=False,
+            filters=filters
+        )
+        datasets.append(dataset)
+        names.append(name)
+
     config = {'architecture': architecture,
               'N': N,
               'output_dir': os.path.abspath(output_dir),
-              'dataset': loader.folded_dataset(fold=fold,
-                                               xtype=xtype,
-                                               ytype=ytype,
-                                               pretrain=True,
-                                               filters=filters)
+              'datasets': np.array(datasets),
+              'dataset_names': np.array(names),
               }
 
     study = optuna.create_study(direction='maximize')
