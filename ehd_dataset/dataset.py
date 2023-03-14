@@ -28,9 +28,6 @@ def ehd_dir2data(directory, wavefile, um_per_px, max_offset=140,
     MEAS_PATH = 'measurements.xlsx'
     VOLT_GAIN = 300
 
-    # if "27-Feb-23_sf-sin-line-20um results.xlsx" in wavefile:
-    #     import ipdb; ipdb.set_trace()
-
     waves = pd.read_excel(wavefile, index_col=0)
     waves['volts'] = waves.note.apply(parse_volt_strings)
     waves['volts'] *= VOLT_GAIN
@@ -88,6 +85,15 @@ def safecat(arr1, arr2):
         except:
             raise RuntimeError("safecat failed to concatenate inputs.")
             import ipdb; ipdb.set_trace()
+
+
+def dict_cat(dicts):
+    keys = np.unique([k for d in dicts for k in d.keys()])
+    catted = dict.fromkeys(keys)
+    for d in dicts:
+        for k in keys:
+            catted[k] = safecat(catted[k], d[k])
+    return catted
 
 
 def compile_ehd_dataset(index_file, dataset_pkl, dataset_excel):
@@ -251,27 +257,32 @@ class EHD_Loader():
         eval_set = train_set.copy()
         for p in idx:
             mask = self.filters_2_mask(filters, p, valid_pairs_only=valid_pairs_only)
-            # if mask.sum() == 0:
-            #     import ipdb; ipdb.set_trace()
+
+            new_dataset = {
+                'X': xmethod(p)[mask],
+                'Y': ymethod(p)[mask],
+                'p': p * np.ones(mask.sum()),
+            }
 
             if fold == p:
-                eval_set['X'] = safecat(eval_set['X'],
-                                        xmethod(p)[mask])
-                eval_set['Y'] = safecat(eval_set['Y'],
-                                        ymethod(p)[mask])
-                eval_set['p'] = safecat(eval_set['p'],
-                                        p * np.ones(mask.sum()))
+                eval_set = dict_cat([eval_set, new_dataset])
+                # eval_set['X'] = safecat(eval_set['X'],
+                #                         xmethod(p)[mask])
+                # eval_set['Y'] = safecat(eval_set['Y'],
+                #                         ymethod(p)[mask])
+                # eval_set['p'] = safecat(eval_set['p'],
+                #                         p * np.ones(mask.sum()))
 
             elif pretrain:
-                train_set['X'] = safecat(train_set['X'],
-                                         xmethod(p)[mask])
-                train_set['Y'] = safecat(train_set['Y'],
-                                         ymethod(p)[mask])
-                train_set['p'] = safecat(train_set['p'],
-                                         p * np.ones(mask.sum()))
+                train_set = dict_cat([train_set, new_dataset])
+                # train_set['X'] = safecat(train_set['X'],
+                #                          xmethod(p)[mask])
+                # train_set['Y'] = safecat(train_set['Y'],
+                #                          ymethod(p)[mask])
+                # train_set['p'] = safecat(train_set['p'],
+                #                          p * np.ones(mask.sum()))
 
         return train_set, eval_set, fold_name
-
 
     def __repr__(self):
         return f"EHD dataset loader with run directories: {self.names}"
