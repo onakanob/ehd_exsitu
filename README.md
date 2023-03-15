@@ -1,3 +1,5 @@
+This code base was archived on March 14, 2023. This represents a mid-stream snapshot of the development cycle of a machine learning approach to predicting the line widths resulting from an EHD printing process. Development of the image analysis and dataset construction routines continues in onakanob/ehd-dataset. Machine learning models and evaluation continues in onakanob/ehd-ml.
+
 # ehd_exsitu
 Image analysis for ex-situ characterization of ehd-printed patterns
 
